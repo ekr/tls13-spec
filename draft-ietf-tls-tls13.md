@@ -1610,9 +1610,7 @@ processed and transmitted as specified by the current active session state.
 The handshake protocol messages are presented below in the order they
 MUST be sent; sending handshake messages in an unexpected order
 results in a fatal error. Unneeded handshake messages can be omitted,
-however.  Note one exception to the ordering: each side sends a
-Finsihed message, but it is only described in its first position.
-The one message that is not bound by these
+however. The one message that is not bound by these
 ordering rules is the HelloRequest message, which can be sent at any
 time, but which SHOULD be ignored by the client if it arrives in the
 middle of a handshake.
@@ -1822,7 +1820,7 @@ for one or more key establishment methods.
 
 Structure of this message:
 
-       enum { dhe(1), ecdhe(2), (255) } KeyExchangeAlgorithm;
+       enum { dhe(1), (255) } KeyExchangeAlgorithm;
 
        struct {
            KeyExchangeAlgorithm algorithm;
@@ -1835,7 +1833,6 @@ Structure of this message:
        struct {
            ClientKeyExchangeOffer offers<0..2^16-1>;
        } ClientKeyExchange;
-
 
 offers
 : A list of ClientKeyExchangeOffer values.
@@ -2147,8 +2144,10 @@ support a prior version of TLS or because of network intermediaries --
 it SHOULD use the EarlyData extension.
 
 Any data included in EarlyData is not integrated into the handshake
-hashes directly. Instead, it is hashed in as marshalled into the
-extension. Note that this may include application_data traffic.  This
+hashes directly. E.g., if the ClientKeyExchange is included in EarlyData,
+then the handshake hashes consist of ClientHello + ServerHello, etc.
+However, because the ClientKeyExchange is in a ClientHello extension,
+it is still hashed transitively. This procedure
 guarantees that the Finished message covers these messages even if
 they are ultimately ignored by the server (e.g., because it is sent to
 a TLS 1.2 server). TLS 1.3 servers MUST understand messages send in
