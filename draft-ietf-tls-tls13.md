@@ -1542,6 +1542,8 @@ pair, as shown in Figure 2:
        CertificateVerify*
        Finished                     -------->
        Application Data             <------->     Application Data
+       
+   Figure 2.  Message flow for a full handshake with mismatched parameters
 
 
 When the client and server decide to resume a previous session or duplicate an
