@@ -3369,7 +3369,6 @@ Implementations MUST NOT negotiate TLS 1.3 or later using an SSL version 2.0 com
 CLIENT-HELLO. Implementations are NOT RECOMMENDED to accept an SSL version 2.0 compatible
 CLIENT-HELLO in order to negotiate older versions of TLS.
 
-<<<<<<< HEAD
 Implementations MUST NOT send or accept any records with a version less than { 3, 0 }.
 
 The security of SSL 3.0 {{SSL3}} is considered insufficient for the reasons enumerated
@@ -3379,13 +3378,6 @@ Implementations MUST NOT send a ClientHello.client_version or ServerHello.server
 set to { 3, 0 } or less. Any endpoint receiving a Hello message with
 ClientHello.client_version or ServerHello.server_version set to { 3, 0 } MUST respond
 with a "protocol_version" alert message and close the connection.
-=======
-When a client negotiates SSL 2.0 but also supports TLS, it MUST set the
-right-hand (least-significant) 8 random bytes of the PKCS padding (not
-including the terminal NUL of the padding) for the RSA encryption of the
-ENCRYPTED-KEY-DATA field of the CLIENT-MASTER-KEY to 0x03 (the other padding
-bytes are random).
->>>>>>> seanturner/protocol_capitalization
 
 
 #  Security Analysis
