@@ -1472,33 +1472,37 @@ CertificateVerify
   server is not authenticating via a certificate. {{server-certificate-verify}}
 
 Finished
-: a MAC over the entire handshake computed using the Static Secret
-  which proves that the server knows ES, and by extension the
-  DH private key share in ServerKeyShare. In some other modes
-  (see TODO) it also authenticates the handshake using the
+: a MAC over the entire handshake computed using the Static Secret.
+  This message provides key confirmation and 
+  In some modes (see TODO) it also authenticates the handshake using the
   the Static Secret. {{server-finished}}
+{:br }
 
+Upon receiving the server's messages, the client responds with his final
+flight of messages:
 
+Certificate 
+: the client's certificate. This message will be omitted if the
+  client is not authenticating via a certificates. {{client-certificate}}.
+  [See TODO]
 
-The TLS Handshake Protocol involves the following steps:
+CertificateVerify
+: a signature over the entire handshake using the public key
+  in the Certificate message. This message will be omitted if the
+  client is not authenticating via a certificate. {{client-certificate-verify}}
 
--  Exchange hello messages to agree on a protocol version,
-   algorithms, exchange random values.
+Finished
+: a MAC over the entire handshake computed using the Static Secret
+  and providing key confirmation. {{server-finished}}.
+{:br }
 
--  Exchange the necessary cryptographic parameters to allow the
-  client and server to agree on shared secret values.
+At this point, the handshake is complete, and the client and server
+may exchange application layer data. Application data MUST NOT
+be sent prior to sending the Finished message. However, if client
+authentication is not used, the server MAY send application data
+as soon as it sends its own Finished.
 
--  Exchange certificates and cryptographic information to allow the
-  client and server to authenticate themselves.
-
--  Compute keying material from the shared secret values.
-
--  Provide security parameters to the record layer.
-
--  Allow the client and server to verify that their peer has
-  calculated the same security parameters and that the handshake
-  occurred without tampering by an attacker.
-
+[[TODO: Move this elsewhere?
 Note that higher layers should not be overly reliant on whether TLS always
 negotiates the strongest possible connection between two peers. There are a
 number of ways in which a man-in-the-middle attacker can attempt to make two
@@ -1512,95 +1516,10 @@ what they require. The TLS protocol is secure in that any cipher suite offers
 its promised level of security: if you negotiate AES-GCM {{GCM}} with
 a 255-bit ECDHE key exchange with a host whose certificate
 chain you have verified, you can expect that to be reasonably "secure" 
-against algorithmic attacks, at least in the year 2015.
-
-The basic TLS Handshake is shown in Figure 1, shown below:
-
-       Client                                               Server
-
-       ClientHello
-         + ClientKeyShare        -------->
-                                                       ServerHello
-                                                    ServerKeyShare
-                                             {EncryptedExtensions}
-                                            {ServerConfiguration*}
-                                                    {Certificate*}
-                                             {CertificateRequest*}
-                                              {CertificateVerify*}
-                                 <--------              {Finished}
-       {Certificate*}
-       {CertificateVerify*}
-       {Finished}                -------->
-       [Application Data]        <------->      [Application Data]
+against algorithmic attacks, at least in the year 2015.]]
 
 
-                Figure 1.  Message flow for a full handshake
-
-
-In its first flight, the client sends a ClientHello message which
-contains a random nonce (ClientHello.random), its preferences for
-Protocol Version, Cipher Suite, and a variety of extensions. In
-this message, it includes a ClientKeyShare extension which contains its
-share of the parameters for key agreement for some set of expected
-server parameters (DHE/ECDHE groups, etc.).
-
-If the client has provided a ClientKeyShare with an appropriate set of
-keying material, the server responds to the ClientHello with a ServerHello
-message. The ServerHello contains the server's nonce
-(ServerHello.random), the server's choice of the Protocol Version,
-Session ID and Cipher Suite, and the server's response to the
-extensions the client offered.
-
-The server can then generate its own keying material share and send a
-ServerKeyShare message which contains its share of the parameters for
-the key agreement. The server can now compute a shared secret based
-on the client's and server's (EC)DHE shares: the Ephemeral Secret (ES)
-(see {{key-schedule}}).
-At this point, the server starts encrypting all remaining handshake
-traffic with the negotiated cipher suite using a key derived from
-ES. The remainder of the server's handshake messages will be
-encrypted using that key. In this mode, the Static Secret (SS)
-is set equal to ES.
-
-Next, the server will send an EncryptedExtensions
-message which contains a response to any client's extensions which are
-not necessary to establish the Cipher Suite. The server will then send
-its certificate in a Certificate message if it is authenticating
-via a signing key. The server may optionally request a certificate from the client by
-sending a CertificateRequest message at this point.
-
-Finally, if the server is authenticating with a signing key,
-it will send a CertificateVerify
-message which provides a signature over the entire handshake up to
-this point. This serves both to authenticate the server and to establish
-the integrity of the negotiation. Finally, the server sends a Finished
-message which includes an integrity check over the handshake
-and demonstrates that the server and client have agreed upon the same keys.
-[[TODO: If the server is not requesting client authentication,
-it MAY start sending application data following the Finished, though
-the server has no way of knowing who will be receiving the data. Add this.]]
-
-Once the client receives the ServerKeyShare, it can also compute the
-ephemeral secret and decrypt the server's remaining handshake messages.
-The client generates its own sending keys based on the ephemeral
-secret and will encrypt the remainder of its handshake messages using those keys
-and the newly established cipher suite.  If the server has sent a
-CertificateRequest message, the client MUST send the Certificate
-message, though it may contain zero certificates.  If the client has
-sent a certificate, a digitally-signed CertificateVerify message is
-sent to explicitly verify possession of the private key in the
-certificate. Finally, the client sends the Finished message.
-
-At this point, the handshake is complete, and the client and server
-may exchange application layer data, which is protected using a new
-set of keys derived from the Ephemeral Secret, the Static Secret,
-and the handshake
-transcript (See {{I-D.ietf-tls-session-hash}} for the security
-rationale for this.)
-
-Application data MUST NOT be sent prior to the Finished message.
-[[TODO: can we make this clearer and more clearly match the text above
-about letting the server send before the client's second flight.]]
+### Incorrect DHE Share
 
 If the client has not provided an appropriate ClientKeyShare (e.g. it
 includes only DHE or ECDHE groups unacceptable or unsupported by the
@@ -1608,6 +1527,7 @@ server), the server corrects the mismatch with a HelloRetryRequest and
 the client will need to restart the handshake with an appropriate
 ClientKeyShare, as shown in Figure 2:
 
+~~~
        Client                                               Server
 
        ClientHello              
@@ -1628,8 +1548,8 @@ ClientKeyShare, as shown in Figure 2:
        {CertificateVerify*}
        {Finished}                -------->
        [Application Data]        <------->     [Application Data]
-
-   Figure 2.  Message flow for a full handshake with mismatched parameters
+~~~
+{: #tls-restart title="Message flow for a full handshake with mismatched parameters"}
 
 [[OPEN ISSUE: Should we restart the handshake hash?
 https://github.com/tlswg/tls13-spec/issues/104.]]
@@ -3189,17 +3109,8 @@ that remains is to calculate the key schedule.
 ## Key Schedule
 
 The TLS handshake establishes secret keying material which is then used
-to protect traffic. This keying material is derived from two input
-secret values:
-
-Ephemeral Secret (ES): A secret which is derived from fresh (EC)DHE
-   shares for this connection. Keying material derived from ES is
-   intended to be forward secure (with the exception of pre-shared
-   key only modes).
-
-Static Secret (SS): A secret which may be derived from static or
-   semi-static keying material, such as a pre-shared key or the
-   server's semi-static (EC)DH share.
+to protect traffic. This keying material is derived from the two
+input secret values: Static Secret (SS) and Ephemeral Secret (ES).
 
 The exact source of each of these secrets depends on the operational
 mode (DHE, ECDHE, PSK, etc.) and is summarized in the table below:
