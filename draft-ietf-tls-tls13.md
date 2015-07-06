@@ -1653,6 +1653,7 @@ are obsoleted in TLS 1.3.
 
 {{tls-resumption-psk}} shows a pair of handshakes in which the first establishes
 a PSK and the second uses it:
+
 ~~~
        Client                                               Server
 
@@ -1673,7 +1674,6 @@ Initial Handshake:
        {Finished}                -------->
                                  <--------      [NewSessionTicket]
        [Application Data]        <------->      [Application Data]
-
 
 
 Subsequent Handshake:
