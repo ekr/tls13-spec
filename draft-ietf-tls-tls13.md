@@ -1368,11 +1368,117 @@ New Alert values are assigned by IANA as described in {{iana-considerations}}.
 
 ##  Handshake Protocol Overview
 
-The cryptographic parameters of the session state are produced by the TLS
-Handshake Protocol, which operates on top of the TLS record layer. When a TLS
-client and server first start communicating, they agree on a protocol version,
-select cryptographic algorithms, optionally authenticate each other, and use
-public-key encryption techniques to generate shared secrets.
+The cryptographic parameters of the session state are produced by the
+TLS Handshake Protocol, which operates on top of the TLS record
+layer. When a TLS client and server first start communicating, they
+agree on a protocol version, select cryptographic algorithms,
+optionally authenticate each other, and establish shared secret keying
+material.
+
+TLS supports three basic key exchange modes:
+
+- Diffie-Hellman (of both the finite field and elliptic curve
+  varieties).
+
+- A pre-shared symmetric key (PSK)
+
+- A combination of a symmetric key and Diffie-Hellman
+
+Which mode is used depends on the negotiated cipher suite. Conceptually,
+the handshake establishes two secrets which are used to derive all the
+keys.
+
+Ephemeral Secret (ES): A secret which is derived from fresh (EC)DHE
+   shares for this connection. Keying material derived from ES is
+   intended to be forward secure (with the exception of pre-shared
+   key only modes).
+
+Static Secret (SS): A secret which may be derived from static or
+   semi-static keying material, such as a pre-shared key or the
+   server's semi-static (EC)DH share.
+
+In some cases, as with the DH handshake shown in {{tls-full}}, these
+secrets are the same, but having both allows for a uniform key
+derivation scheme for all cipher modes.
+
+The basic TLS Handshake for DH is shown in {{tls-full}}:
+
+~~~
+     Client                                               Server
+
+     ClientHello
+       + ClientKeyShare        -------->
+                                                     ServerHello
+                                                  ServerKeyShare
+                                           {EncryptedExtensions}
+                                          {ServerConfiguration*}
+                                                  {Certificate*}
+                                           {CertificateRequest*}
+                                            {CertificateVerify*}
+                               <--------              {Finished}
+     {Certificate*}
+     {CertificateVerify*}
+     {Finished}                -------->
+     [Application Data]        <------->      [Application Data]
+
+\* Indicates optional or situation-dependent messages that are not always sent.
+
+{} Indicates messages protected using keys derived from the ephemeral secret.
+
+[] Indicates messages protected using keys derived from the master secret.
+~~~
+{: #tls-full title="Message flow for full TLS Handshake"}
+
+
+The first message sent by the client is the ClientHello {{client-hello}} which contains
+a random nonce (ClientHello.random), it's offered protocol version,
+cipher suite, and extensions, and one or more Diffie-Hellman key
+shares in the ClientKeyShare extension {{client-key-share}}.
+
+The server processes the ClientHello and determines the appropriate
+cryptographic parameters for the connection. It then responds with
+the following messages:
+
+ServerHello
+ : indicates the negotiated connection parameters. {{server-hello}}
+
+ServerKeyShare
+: the server's ephemeral Diffie-Hellman Share which must be in the
+  same group as one of the shares offered by the client. This
+  message will be omitted if DH is not in use (i.e., a pure PSK
+  cipher suite is selected). The ClientKeyShare and ServerKeyShare
+  are used together to derive the Static Secret and Ephemeral
+  Secret (in this mode they are the same).  {{server-key-share}}
+
+EncryptedExtensions
+: responses to any extensions which are not required in order to
+  determine the cryptographic parameters. {{encrypted-extensions}}.
+
+Certificate 
+: the server certificate. This message will be omitted if the
+  server is not authenticating via a certificates. {{server-certificate}}.
+  [See TODO]
+
+CertificateRequest
+: if certificate-based client authentication is desired, the
+  desired parameters for that certificate. This message will
+  be omitted if client authentication is not desired.
+  [[OPEN ISSUE: See https://github.com/tlswg/tls13-spec/issues/184]].
+  {{certificate-request}}
+
+CertificateVerify
+: a signature over the entire handshake using the public key
+  in the Certificate message. This message will be omitted if the
+  server is not authenticating via a certificate. {{server-certificate-verify}}
+
+Finished
+: a MAC over the entire handshake computed using the Static Secret
+  which proves that the server knows ES, and by extension the
+  DH private key share in ServerKeyShare. In some other modes
+  (see TODO) it also authenticates the handshake using the
+  the Static Secret. {{server-finished}}
+
+
 
 The TLS Handshake Protocol involves the following steps:
 
@@ -1430,11 +1536,6 @@ The basic TLS Handshake is shown in Figure 1, shown below:
 
                 Figure 1.  Message flow for a full handshake
 
-\* Indicates optional or situation-dependent messages that are not always sent.
-
-{} Indicates messages protected using keys derived from the ephemeral secret.
-
-[] Indicates messages protected using keys derived from the master secret.
 
 In its first flight, the client sends a ClientHello message which
 contains a random nonce (ClientHello.random), its preferences for
