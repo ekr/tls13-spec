@@ -1569,11 +1569,11 @@ described below.
 
 ### Cached Server Configuration
 
-During an initial handshake, the server can provide a ServerConfiguration 
-containing a long-term (EC)DH share. On future
+During an initial handshake, the server can provide a ServerConfiguration
+message containing a long-term (EC)DH share. On future
 connections, the client can indicate to the server that it knows the
 server's configuration and if that configuration is valid the server
-need not send either a Certificate or CertificateVerify message (provided
+can omit both th Certificate or CertificateVerify message (provided
 that a new configuration is not supplied in this handshake). In this
 case, the server's long-term DHE key is combined with the client's
 ClientKeyShare to produce SS. ES is computed as above.
@@ -1591,6 +1591,7 @@ application data as well as its Certificate and CertificateVerify
 (if client authentication is requested) on its first flight, thus
 reducing handshake latency, as shown below.
 
+~~~
        Client                                               Server
 
        ClientHello
@@ -1605,25 +1606,29 @@ reducing handshake latency, as shown below.
 
        [Application Data]        <------->      [Application Data]
 
-
-                Figure 3.  Message flow for a zero round trip handshake
-
 () Indicates messages protected using keys derived from the static secret.
+~~~
+{: #tls-0-rtt title="Message flow for a zero round trip handshake"}
+
+
+Note: because sequence numbers continue to increment between the
+initial (early) application data and the application data sent
+after the handshake has complete, an attacker cannot remove
+early application data messages.
 
 IMPORTANT NOTE: Regardless of the cipher suite 0-RTT data sent on the
 first flight is not forward secure, because it is encrypted solely
 with the server's semi-static (EC)DH share. In addition, it is not
-replay protected between connections. Unless the server
-takes special measures outside those provided by TLS (See Section {{replay-properties}}),
-the server has no guarantee that the same 0-RTT data was not
-transmitted on multiple 0-RTT connections. However, 0-RTT data
-cannot be duplicated within a connection (i.e., the server will not
-process the same data twice for the same connection) and also
-cannot be sent as if it were ordinary TLS data. Finally, note that
-if the server key is compromised, and client authentication is
-used, then the attacker can impersonate the client to the server
-(as it knows the traffic key).
-[[TODO: Explain how sequence numbers provide protection against 0-RTT truncation.]]
+replay protected between connections. Unless the server takes special
+measures outside those provided by TLS (See Section
+{{replay-properties}}), the server has no guarantee that the same
+0-RTT data was not transmitted on multiple 0-RTT connections. However,
+0-RTT data cannot be duplicated within a connection (i.e., the server
+will not process the same data twice for the same connection) and also
+cannot be sent as if it were ordinary TLS data. Finally, note that if
+the server key is compromised, and client authentication is used, then
+the attacker can impersonate the client to the server (as it knows the
+traffic key).
 
 ### Resumption and PSK
 
@@ -1646,9 +1651,9 @@ new connection. In TLS 1.2 and below, this functionality was provided
 by "session resumption" and "session tickets" {{RFC5077}}. Both mechanisms
 are obsoleted in TLS 1.3.
 
-Figure 4 shows a pair of handshakes in which the first establishes
+{{tls-resumption-psk}} shows a pair of handshakes in which the first establishes
 a PSK and the second uses it:
-
+~~~
        Client                                               Server
 
 Initial Handshake:
@@ -1681,9 +1686,8 @@ Subsequent Handshake:
        {Certificate*}
        {Finished}                -------->
        [Application Data]        <------->      [Application Data]
-
-
-                Figure 4.  Message flow for PSK-based resumption
+~~~
+{: #tls-resumption-psk title="Message flow for resumption and PSK"}
 
 Note that the client supplies a ClientKeyShare to the server as well, which
 allows the server to decline resumption and fall back to a full handshake.
