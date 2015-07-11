@@ -313,6 +313,12 @@ server: The endpoint which did not initiate the TLS connection.
 ##  Major Differences from TLS 1.2
 
 
+draft-09
+
+- Shift the final decision to abort a handshake due to incompatible
+  certificates to the client rather than having servers abort early.
+
+
 draft-08
 
 - Remove support for weak and lesser used named curves.
@@ -320,11 +326,11 @@ draft-08
 - Remove support for MD5 and SHA-224 hashes with signatures.
 
 - Update lists of available AEAD cipher suites and error alerts.
- 
+
 - Reduce maximum permitted record expansion for AEAD from 2048 to 256 octets.
 
 - Require digital signatures even when a previous configuration is used.
-  
+
 - Merge EarlyDataIndication and KnownConfiguration.
 
 - Change code point for server_configuration to avoid collision with
@@ -2792,12 +2798,19 @@ The following rules apply to the certificates sent by the server:
   guide certificate selection. As servers MAY require the presence of the server_name
   extension, clients SHOULD send this extension.
 
-All certificates provided by the server MUST be signed by a hash/signature
-algorithm pair that appears in the "signature_algorithms" extension provided
-by the client (see {{signature-algorithms}}).
-[[OPEN ISSUE: changing this is under consideration]]
-Note that this implies that a certificate containing a key for one signature
-algorithm MAY be signed using a different signature algorithm (for instance,
+All certificates provided by the server MUST be signed by a
+hash/signature algorithm pair that appears in the "signature_algorithms"
+extension provided by the client, where possible (see {{signature-algorithms}}).
+If the server cannot produce a certificate chain that is signed only via the
+indicated supported pairs, then it SHOULD continue the handshake by sending
+the client a certificate chain of its choice that may include algorithms
+that are not known to be supported by the client. If the client
+cannot construct an acceptable chain using the provided certificates
+and decides to abort the handshake, then it MUST send an
+"unsupported_certificate" alert message and close the connection.
+
+Note that a certificate containing a key for one signature algorithm
+MAY be signed using a different signature algorithm (for instance,
 an RSA key signed with a ECDSA key).
 
 If the server has multiple certificates, it chooses one of them based on the
@@ -3010,7 +3023,8 @@ implementation need only maintain one running hash per hash type for
 CertificateVerify, Finished and other messages.
 
 > The signature algorithm and hash algorithm MUST be a pair offered in the
-"signature_algorithms" extension (see {{signature-algorithms}}). Note that
+"signature_algorithms" extension unless no valid certificate chain can be
+produced without unsupported algorithms (see {{signature-algorithms}}). Note that
 there is a possibility for inconsistencies here. For instance, the client might
 offer DHE_DSS key exchange but omit any DSA pairs from its
 "signature_algorithms" extension. In order to negotiate correctly, the server
