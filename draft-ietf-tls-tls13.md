@@ -1543,7 +1543,8 @@ Exch \  + KeyShare               -------->
                                              {CertificateRequest*}  v Params
                                                     {Certificate*}  ^
                                               {CertificateVerify*}  | Auth
-                                 <--------              {Finished}  v
+                                                        {Finished}  v
+                                 <--------     [Application Data*]
      ^ {Certificate*}
 Auth | {CertificateVerify*}
      v {Finished}                -------->
@@ -1571,7 +1572,7 @@ Key Exchange: establish shared keying material and select the
    encrypted.
 
 Server Parameters: establish other handshake parameters 
-(whether the client is authenticated, support for 0-RTT, etc.)
+   (whether the client is authenticated, support for 0-RTT, etc.)
 
 Authentication: authenticate the server (and optionally the client)
    and provide key confirmation and handshake integrity.
@@ -1597,7 +1598,7 @@ The server then sends three messages to establish the Server Parameters:
 
 ServerConfiguration
 : supplies a configuration for 0-RTT handshakes (see {{zero-rtt-exchange}}).
-[{{server-configuration}}]
+  [{{server-configuration}}]
 
 EncryptedExtensions
 : responses to any extensions which are not required in order to
@@ -1681,7 +1682,8 @@ KeyShare extension, as shown in Figure 2:
                                                {CertificateRequest*}
                                                       {Certificate*}
                                                 {CertificateVerify*}
-                                   <--------              {Finished}
+                                                          {Finished}
+                                   <--------     [Application Data*]
          {Certificate*}
          {CertificateVerify*}
          {Finished}                -------->
@@ -1732,11 +1734,11 @@ Data  |  (Finished)
                                                {CertificateRequest*}
                                                       {Certificate*}
                                                 {CertificateVerify*}
-                                   <--------              {Finished}
+                                                          {Finished}
+                                   <--------     [Application Data*]
          {Certificate*}
          {CertificateVerify*}
          {Finished}                -------->
-        
          [Application Data]        <------->      [Application Data]
         
                *  Indicates optional or situation-dependent
@@ -1828,7 +1830,8 @@ Initial Handshake:
                                              {CertificateRequest*}
                                                     {Certificate*}
                                               {CertificateVerify*}
-                                 <--------              {Finished}
+                                                        {Finished}
+                                 <--------     [Application Data*]
        {Certificate*}
        {CertificateVerify*}
        {Finished}                -------->
@@ -1843,7 +1846,8 @@ Subsequent Handshake:
                                                        ServerHello
                                            + PreSharedKeyExtension
                                              {EncryptedExtensions}
-                                 <--------              {Finished}
+                                                        {Finished}
+                                 <--------     [Application Data*]
        {Finished}                -------->
        [Application Data]        <------->      [Application Data]
 ~~~
