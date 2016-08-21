@@ -2324,6 +2324,8 @@ One way to implement this is:
 3. Copy the verify_data into the last Hash.length bytes of the
    ClientHello.
 
+[[OPEN ISSUE: Should we instead hash the first length - Hash.length() bytes?
+Might be easier to implement...]]
 
 ## Server Parameters
 
