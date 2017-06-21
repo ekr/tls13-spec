@@ -3575,7 +3575,7 @@ described in {{stateless-anti-replay}}.
 See {{replay-0rtt}} for more information on the limitations
 of these mechanisms.
 
-Clients are unable to determine which, if any, of these mechanisms
+In normal operation Client will not know which, if any, of these mechanisms
 servers actually implement and therefore MUST only send early
 data which they are willing to have subject to the attacks
 described in {{replay-0rtt}}.
@@ -3595,8 +3595,8 @@ using one PSK enjoy forward security. This is a security advantage for
 all 0-RTT data and for PSK usage when PSK is used without DH.
 
 Because this mechanism requires sharing the session database between
-server nodes, in environments with multiple distributed servers
-it may be hard to achieve high rates of PSK 0-RTT
+server nodes in environments with multiple distributed servers,
+in such cases it may be hard to achieve high rates of PSK 0-RTT
 success when compared with self-encrypted tickets which do not
 require consistent server-side storage for PSK-based session
 establishment but do require it for anti-replay if 0-RTT is allowed,
@@ -3631,10 +3631,10 @@ the client's "pre_shared_key" extension. The server can determine the
     expected_arrival_time = adjusted_creation_time + client's ticket age
 ~~~~
 
-For a given storage window, the server implements anti-replay as
+For a given Client Hello recording window, the server implements anti-replay as
 follows.
 
-1. Verify the PSK binder.
+1. Verify the PSK binder as described in {{pre-shared-key-extension}}.
 
 2. If the expected_arrival_time is outside the window or the ClientHello
    matches a known ClientHello then accept the PSK but
@@ -3645,7 +3645,7 @@ follows.
    or accept the PSK but reject 0-RTT.
 
 4. Otherwise, store the ClientHello as long as its
-   expected_arrival_time is inside the the window and
+   expected_arrival_time is inside the the window, and
    accept 0-RTT.
 
 The server MUST derive the storage key only from validated sections
@@ -3665,10 +3665,10 @@ servers MAY implement a separate cache for each cluster, thus
 limiting replay to once per cluster. Servers MAY also implement
 data stores with false positives, such as Bloom filters, in
 which case they MUST respond to apparent replay by rejecting
-0-RTT but SHOULD NOT abort the handshake.
+0-RTT but MUST NOT abort the handshake.
 
 Note: When implementations are freshly started, they SHOULD
-reject 0-RTT as long as any portion of their storage window overlaps
+reject 0-RTT as long as any portion of their recording window overlaps
 the startup time. Otherwise, they run the risk of accepting
 replays which were originally sent during that period.
 
@@ -3678,9 +3678,9 @@ replays which were originally sent during that period.
 Finally, the server can implement a very rough anti-replay mechanism
 merely by measuring the mismatch between client and server views of
 time. The server can determine its view of the age of the ticket by
-subtracting the the time the ticket was issued from the current
+subtracting the time the ticket was issued from the current
 time. If the client and server clocks were running at the same rate,
-the client's view of would be shorter than the actual time elapsed on
+the client's view of the ticket age would be shorter than the actual time elapsed on
 the server by a single round trip time.  This difference is comprised
 of the delay in sending the NewSessionTicket message to the client,
 plus the time taken to send the ClientHello to the server.
@@ -3739,8 +3739,8 @@ appropriate application traffic key.
 ### New Session Ticket Message {#NSTMessage}
 
 At any time after the server has received the client Finished message,
-it MAY send a NewSessionTicket message. This message creates a
-pre-shared key (PSK) binding between the ticket value and a secret
+it MAY send a NewSessionTicket message. This message creates an
+association between the ticket value and a secret PSK
 derived from the resumption master secret.
 
 The client MAY use this PSK for future handshakes by including the
