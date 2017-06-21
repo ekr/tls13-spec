@@ -1388,30 +1388,13 @@ those for other kinds of TLS data.  Specifically:
 keys derived using the offered PSK.
 
 2. There are no guarantees of non-replay between connections.
-Unless the server takes special measures outside those provided by TLS,
-the server has no guarantee that the same
-0-RTT data was not transmitted on multiple 0-RTT connections
-(see {{anti-replay}} and {{replay-0rtt}} for more details).
-This is especially relevant if the data is authenticated either
-with TLS client authentication or inside the application layer
-protocol. However, 0-RTT data cannot be duplicated within a connection (i.e., the server
-will not process the same data twice for the same connection) and
-an attacker will not be able to make 0-RTT data appear to be
-1-RTT data (because it is protected with different keys.)
-
-
-Clients MUST NOT send messages in early data which are not safe to
-have replayed and which they would not be willing to retry across
-multiple 1-RTT connections. Nevertheless, servers have the
-responsibility to protect themselves against attacks employing 0-RTT
-data replication. Additionally, protocols MUST NOT use 0-RTT data
-without a profile that defines its use. That profile needs to identify
-which messages or interactions are safe to use with 0-RTT. In
-addition, to avoid accidental misuse, implementations SHOULD NOT
-enable 0-RTT unless specifically requested. Implementations SHOULD
-provide special functions for 0-RTT data to ensure that an application
-is always aware that it is sending or receiving data that might be
-replayed.
+Anti-replay for ordinary TLS 1.3 1-RTT data is provided via the
+server's Random value, but 0-RTT data does not depend on the
+ServerHello and therefore has weaker guarantees. However, 0-RTT data
+cannot be duplicated within a connection (i.e., the server will not
+process the same data twice for the same connection) and an attacker
+will not be able to make 0-RTT data appear to be 1-RTT data (because
+it is protected with different keys.)  [TODO: cross-reference]
 
 The same warnings apply to any use of the early_exporter_master_secret.
 
@@ -3559,25 +3542,42 @@ appropriate application traffic key as described in {{updating-traffic-keys}}.
 In particular, this includes any alerts sent by the
 server in response to client Certificate and CertificateVerify messages.
 
+
 ## 0-RTT and Anti-Replay {#anti-replay}
 
-As noted in {{zero-rtt-data}}, unlike 1-RTT data, TLS does not provide
-inherent replay protections for 0-RTT data. Instead, it provides
-mechanisms which allow a server to implement a number of limited
-server-side anti-replay defenses.
-Servers need not permit 0-RTT at all, but those which do
-SHOULD implement
-either Single-Use Tickets {{single-use-tickets}} or
-Client Hello Recording {{client-hello-recording}}
-as described
-below, and if not, SHOULD implement the stateless mechanism
-described in {{stateless-anti-replay}}.
-See {{replay-0rtt}} for more information on the limitations
-of these mechanisms.
+As noted in {{zero-rtt-data}}, TLS does not provide inherent replay
+protections for 0-RTT data. There are two potential threats to be
+concerned with:
 
-In normal operation Client will not know which, if any, of these mechanisms
-servers actually implement and therefore MUST only send early
-data which they are willing to have subject to the attacks
+- Network attackers who mount a replay attack by simply duplicating a
+  flight of 0-RTT data.  
+  
+- Network attackers who take advantage of client retry behavior
+  to arrange for replay at the server. This threat already exists
+  to some extent because browsers respond to network errors by
+  attempting to retry requests. However, 0-RTT adds an additional
+  dimension for any server system which does not maintain globally
+  consistent server state. Specifically, if a server system has
+  multiple zones where tickets from zone A will not be accepted in
+  zone B, then an attacker can duplicate a ClientHello and early
+  data intended for A to both A and B. At A, the data will
+  be accepted in 0-RTT, but in B the server will reject 0-RTT
+  data and instead force a full handshake. If the attacker, blocks
+  the ServerHello from A, then the client will complete the
+  handshake and retry the request, leading to duplication on
+  the server system as a whole.
+
+The first class of attack can be prevented by the techniques described
+in this section.  Servers need not permit 0-RTT at all, but those
+which do SHOULD implement one of these mechanisms. The second class
+of attack cannot be prevented at the TLS layer and must be dealt
+with by any application. Note that any application whose clients
+implement any kind of retry behavior already needed to implement
+some sort of anti-repley defense.
+
+In normal operation, clients will not know which, if any, of these
+mechanisms servers actually implement and therefore MUST only send
+early data which they are willing to have subject to the attacks
 described in {{replay-0rtt}}.
 
 
@@ -3659,13 +3659,24 @@ are used for this purpose, then this attack is not possible.
 Because this mechanism does not require storing all outstanding
 tickets, it may be easier to implement in distributed systems with
 high rates of resumption and 0-RTT, at the cost of potentially
-weaker anti-replay defense because of the difficulty reliably
-storing and retrieving the received ClientHello messages. In addition,
-servers MAY implement a separate cache for each cluster, thus
-limiting replay to once per cluster. Servers MAY also implement
-data stores with false positives, such as Bloom filters, in
-which case they MUST respond to apparent replay by rejecting
-0-RTT but MUST NOT abort the handshake.
+weaker anti-replay defense because of the difficulty of reliably
+storing and retrieving the received ClientHello messages.
+In many such systems, it is impractical to have globally
+consistent storage of of all the received ClientHellos. In
+this situation, implementations have two primary options.
+The stronger design is to have a single storage zone be
+authoritative for a given ticket and refuse 0-RTT for that
+ticket in any other zone. This approach prevents simple
+replay and limits the number of copies of the application
+data received to the number of retries clients are willing to perform.
+The weaker design is to implement separate storage for
+each zone but allow 0-RTT in any zone. This approach limits
+the number of replays to once per zone. Application message
+duplication of course remains possible.
+
+Servers MAY also implement data stores with false positives, such as
+Bloom filters, in which case they MUST respond to apparent replay by
+rejecting 0-RTT but MUST NOT abort the handshake.
 
 Note: When implementations are freshly started, they SHOULD
 reject 0-RTT as long as any portion of their recording window overlaps
