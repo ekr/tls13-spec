@@ -4672,9 +4672,7 @@ The first class of attack can be prevented by the mechanism described
 in this section.  Servers need not permit 0-RTT at all, but those
 which do SHOULD implement either the single-use tickets or
 ClientHello recording techniques described in the following two
-sections They MAY additionally implement time-based filtering
-{{time-based-filtering}} as an initial
-screen to prevent gross replays.
+sections.
 
 The second class of attack cannot be prevented at the TLS layer and
 must be dealt with by any application. Note that any application whose
@@ -4718,6 +4716,77 @@ to grow without bound. A server can instead record ClientHellos within
 a given time window and use the "obfuscated_ticket_age" to ensure that
 tickets aren't reused outside that window.
 
+When a ClientHello is received, the server maintains a "recording
+window" of ClientHellos around the current wall clock time. When a
+ClientHello is received, the server first verifies the PSK binder
+as described {{pre-shared-key-extension}}. It then computes the
+expected_arrival_time as described in the next section
+and and rejects 0-RTT if it is outside the
+recording window, as described in the following section.
+
+If the expected arrival time is in the window, then the server
+checks to see if it has recorded a matching ClientHello. If
+either aborts the handshake with an "illegal_parameter" alert
+or accepts the PSK but reject 0-RTT. If no matching ClientHello
+is found, then it stores the ClientHello as long as the
+expected_arrival_time is inside the window and accepts 0-RTT.
+
+The server MUST derive the storage key only from validated sections
+of the ClientHello. If the ClientHello contains multiple
+PSK identities, then an attacker can create multiple ClientHellos
+with different binder values for the less-preferred identity on the
+assumption that the server will not verify it. I.e., if the
+client sends PSKs A and B but the server prefers, A, then the
+attacker can change the binder for B without affecting the binder
+for A. If the validated binder or the ClientHello.random
+are used for this purpose, then this attack is not possible.
+
+Because this mechanism does not require storing all outstanding
+tickets, it may be easier to implement in distributed systems with
+high rates of resumption and 0-RTT, at the cost of potentially
+weaker anti-replay defense because of the difficulty of reliably
+storing and retrieving the received ClientHello messages.
+In many such systems, it is impractical to have globally
+consistent storage of of all the received ClientHellos. Such
+servers have two primary options.
+The stronger design is to have a single storage zone be
+authoritative for a given ticket and refuse 0-RTT for that
+ticket in any other zone. This approach prevents simple
+replay by the attacker because only one zone will accept
+0-RTT data. The weaker design is to implement separate storage for
+each zone but allow 0-RTT in any zone. This approach limits
+the number of replays to once per zone. Application message
+duplication of course remains possible for either design.
+
+Servers MAY also implement data stores with false positives, such as
+Bloom filters, in which case they MUST respond to apparent replay by
+rejecting 0-RTT but MUST NOT abort the handshake.
+
+When implementations are freshly started, they SHOULD
+reject 0-RTT as long as any portion of their recording window overlaps
+the startup time. Otherwise, they run the risk of accepting
+replays which were originally sent during that period.
+
+Note: If the client's clock is running much faster than the server's
+then a ClientHello may be received that is far outside the window,
+in which case it might be accepted for 1-RTT, causing a client retry,
+and then acceptable later for 0-RTT. This is another variant of
+the second form of attack described above.
+
+
+
+## Relevance Checks
+
+Because the ClientHello indicates the time at which the client sent
+it, it is possible to efficiently determine whether a ClientHello was
+likely sent reasonably recently and only accept 0-RTT for such
+ClientHello, otherwise falling back to a 1-RTT handshake.
+This is necessary for the ClientHello storage mechanism
+described in {{client-hello-recording}} because otherwise the server
+needs to store an unlimited number of ClientHellos and is a useful optimization for
+single-use tickets because it allows efficient rejection of ClientHellos
+which cannot be used for 0-RTT.
+
 In order to implement this mechanism, a server needs to store the time
 that the server generated the session ticket, offset by an estimate of
 the round trip time between client and server. I.e.,
@@ -4737,92 +4806,23 @@ the client's "pre_shared_key" extension. The server can determine the
     expected_arrival_time = adjusted_creation_time + client's ticket age
 ~~~~
 
-For a given Client Hello recording window, the server implements anti-replay as
-follows.
+When a new ClientHello is received, the expected_arrival_time is then
+compared against the current server wall clock time and if they differ
+by more than a certain amount, 0-RTT is rejected, though the 1-RTT
+handshake can be allowed to complete.
 
-1. Verify the PSK binder as described in {{pre-shared-key-extension}}.
-
-2. If the expected_arrival_time is outside the window or the ClientHello
-   matches a known ClientHello then accept the PSK but
-   reject 0-RTT.
-
-3. If the ClientHello matches a known ClientHello then
-   either abort the handshake with an "illegal_parameter" alert
-   or accept the PSK but reject 0-RTT.
-
-4. Otherwise, store the ClientHello as long as its
-   expected_arrival_time is inside the the window, and
-   accept 0-RTT.
-
-The server MUST derive the storage key only from validated sections
-of the ClientHello. If the ClientHello contains multiple
-PSK identities, then an attacker can create multiple ClientHellos
-with different binders for the less-preferred identity on the
-assumption that the server will not verify it, thus bypassing
-anti-replay defenses. If the validated binder or the ClientHello.random
-are used for this purpose, then this attack is not possible.
-
-Because this mechanism does not require storing all outstanding
-tickets, it may be easier to implement in distributed systems with
-high rates of resumption and 0-RTT, at the cost of potentially
-weaker anti-replay defense because of the difficulty of reliably
-storing and retrieving the received ClientHello messages.
-In many such systems, it is impractical to have globally
-consistent storage of of all the received ClientHellos. Such
-servers have two primary options.
-The stronger design is to have a single storage zone be
-authoritative for a given ticket and refuse 0-RTT for that
-ticket in any other zone. This approach prevents simple
-replay by the attacker because only one zone will accept
-0-RTT data. The weaker design is to implement separate storage for
-each zone but allow 0-RTT in any zone. This approach limits
-the number of replays to once per zone. Application message
-duplication of course remains possible for either deisng.
-
-Servers MAY also implement data stores with false positives, such as
-Bloom filters, in which case they MUST respond to apparent replay by
-rejecting 0-RTT but MUST NOT abort the handshake.
-
-Note: When implementations are freshly started, they SHOULD
-reject 0-RTT as long as any portion of their recording window overlaps
-the startup time. Otherwise, they run the risk of accepting
-replays which were originally sent during that period.
-
-
-## Time-Based Filtering
-
-The mechanisms described above can be made more efficient by
-using time-based filtering to exclude gross replays between 
-the client and server views of the ticket age (thus
-avoiding the need to check consistent data stores)
-The server can determine its view of the age of the ticket by
-subtracting the time the ticket was issued from the current
-time. If the client and server clocks were running at the same rate,
-the client's view of the ticket age would be shorter than the actual time elapsed on
-the server by a single round trip time.  This difference is comprised
-of the delay in sending the NewSessionTicket message to the client,
-plus the time taken to send the ClientHello to the server.
-
-The mismatch between the client's and server's views of age is thus
-given by:
-
-~~~~
-    mismatch = (client's view + RTT estimate) - (server's view)
-~~~~
-
-There are several potential sources of error that make an exact
-measurement of time difficult. Variations in client and server clock
+There are several potential sources of error that might cause
+mismatches between the expected arrival time and the measured
+time. Variations in client and server clock
 rates are likely to be minimal, though potentially with gross time
 corrections.  Network propagation delays are the most likely causes of
 a mismatch in legitimate values for elapsed time.  Both the
 NewSessionTicket and ClientHello messages might be retransmitted and
 therefore delayed, which might be hidden by TCP. For browser clients
-on the Internet, this implies that an
-allowance on the order of ten seconds to account for errors in clocks and
-variations in measurements is advisable; other deployment scenarios
-may have different needs. Outside the selected range, the
-server SHOULD reject early data and fall back to a full 1-RTT
-handshake. Clock skew distributions are not
+on the Internet, this implies that windows 
+on the order of ten seconds to account for errors in clocks and
+variations in measurements are advisable; other deployment scenarios
+may have different needs. Clock skew distributions are not
 symmetric, so the optimal tradeoff may involve an asymmetric range
 of permissible mismatch values.
 
