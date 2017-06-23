@@ -1388,10 +1388,9 @@ those for other kinds of TLS data.  Specifically:
 keys derived using the offered PSK.
 
 2. There are no guarantees of non-replay between connections.
-
-Anti-replay for ordinary TLS 1.3 1-RTT data is provided via the
-server's Random value, but 0-RTT data does not depend on the
-ServerHello and therefore has weaker guarantees. This is especially
+Protection against replay for ordinary TLS 1.3 1-RTT data is
+provided via the server's Random value, but 0-RTT data does not depend
+on the ServerHello and therefore has weaker guarantees.  This is especially
 relevant if the data is authenticated either with TLS client
 authentication or inside the application protocol. The same warnings
 apply to any use of the early_exporter_master_secret.
@@ -3572,7 +3571,7 @@ appropriate application traffic key.
 ### New Session Ticket Message {#NSTMessage}
 
 At any time after the server has received the client Finished message,
-it MAY send a NewSessionTicket message. This message creates an
+it MAY send a NewSessionTicket message. This message creates a unique
 association between the ticket value and a secret PSK
 derived from the resumption master secret.
 
@@ -4650,8 +4649,8 @@ protections for 0-RTT data. There are two potential threats to be
 concerned with:
 
 - Network attackers who mount a replay attack by simply duplicating a
-  flight of 0-RTT data.  
-  
+  flight of 0-RTT data.
+
 - Network attackers who take advantage of client retry behavior
   to arrange for the server to receive multiple copies of an application
   message. This threat already exists
@@ -4691,21 +4690,21 @@ The simplest form of anti-replay defense is for the server to only
 allow each session ticket to be used once. In order to implement this, the server
 maintains a database of all outstanding valid tickets; deleting each
 ticket from the database as it is used. If an unknown ticket is
-provided, the server falls back to a full handshake as normal.
+provided, the server falls back to a full handshake.
 
 If the tickets are not self-contained but rather are database keys,
 and the corresponding PSKs are deleted upon use, then connections established
-using one PSK enjoy forward security. This is a security advantage for
-all 0-RTT data and for PSK usage when PSK is used without DH.
+using one PSK enjoy forward security. This benefits security for
+all 0-RTT data and PSK usage when PSK is used without DH.
 
 Because this mechanism requires sharing the session database between
 server nodes in environments with multiple distributed servers,
-in such cases it may be hard to achieve high rates of PSK 0-RTT
-success when compared with self-encrypted tickets. Unlike session
+it may be hard to achieve high rates of successful PSK 0-RTT
+connections when compared to self-encrypted tickets. Unlike
 session databases, session tickets can successfully do PSK-based
 session establishment even without consistent storage, though they
-still need some sort of consistent storage for anti-replay
-of 0-RTT data if 0-RTT is allowed, as detailed in the following
+still require consistent storage for anti-replay
+of 0-RTT data when 0-RTT is allowed, as detailed in the following
 section.
 
 ## Client Hello Recording
@@ -4751,8 +4750,9 @@ high rates of resumption and 0-RTT, at the cost of potentially
 weaker anti-replay defense because of the difficulty of reliably
 storing and retrieving the received ClientHello messages.
 In many such systems, it is impractical to have globally
-consistent storage of of all the received ClientHellos. Such
-servers have two primary options. The stronger design is to have a single storage zone be
+consistent storage of all the received ClientHellos. Such
+servers have two primary options.
+The stronger design is to have a single storage zone be
 authoritative for a given ticket and refuse 0-RTT for that
 ticket in any other zone. This approach prevents simple
 replay by the attacker because only one zone will accept
@@ -4818,16 +4818,16 @@ corrections.  Network propagation delays are the most likely causes of
 a mismatch in legitimate values for elapsed time.  Both the
 NewSessionTicket and ClientHello messages might be retransmitted and
 therefore delayed, which might be hidden by TCP. For clients
-on the Internet, this implies that windows 
+on the Internet, this implies windows to be
 on the order of ten seconds to account for errors in clocks and
-variations in measurements are advisable; other deployment scenarios
+variations in measurements; other deployment scenarios
 may have different needs. Clock skew distributions are not
 symmetric, so the optimal tradeoff may involve an asymmetric range
 of permissible mismatch values.
 
 Note that this technique alone is not sufficient to prevent replays
 because it does not detect them during the error window, which,
-depending on bandwidth and system capacity could include 
+depending on bandwidth and system capacity could include
 billions of replays in real-world settings.
 
 #  Compliance Requirements
