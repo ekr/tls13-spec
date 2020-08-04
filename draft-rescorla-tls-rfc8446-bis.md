@@ -2318,9 +2318,9 @@ ensure that (x, y) is a correct solution to the elliptic curve
 equation.  For these curves, implementors do not need to verify
 membership in the correct subgroup.
 
-For X25519 and X448, the contents of the public value are the byte string inputs and outputs of the
-corresponding functions defined in {{RFC7748}}: 32 bytes for X25519 and 56
-bytes for X448.
+For X25519 and X448, the contents of the public value is the K_A
+or K_B value described in Section 6 of {{RFC7748}}.
+This is 32 bytes for X25519 and 56 bytes for X448.
 
 Note: Versions of TLS prior to 1.3 permitted point format negotiation;
 TLS 1.3 removes this feature in favor of a single point format
@@ -2557,7 +2557,7 @@ PSK is established or default to SHA-256 if no such algorithm
 is defined. The server MUST ensure that it selects a compatible
 PSK (if any) and cipher suite.
 
-In TLS versions prior to TLS 1.3, the Server Name Identification (SNI) value was
+In TLS versions prior to TLS 1.3, the Server Name Identifications (SNI) value was
 intended to be associated with the session (Section 3 of {{RFC6066}}), with the
 server being required to enforce that the SNI value associated with the session
 matches the one specified in the resumption handshake.  However, in reality the
