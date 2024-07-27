@@ -2,12 +2,12 @@
 
 
 
-Network Working Group                                        E. Rescorla
+Transport Layer Security                                     E. Rescorla
 Internet-Draft                                   Windy Hill Systems, LLC
-Obsoletes: 8446 (if approved)                           29 November 2023
+Obsoletes: 8446 (if approved)                               27 July 2024
 Updates: 5705, 6066, 7627, 8422 (if approved)                           
 Intended status: Standards Track                                        
-Expires: 1 June 2024
+Expires: 28 January 2025
 
 
         The Transport Layer Security (TLS) Protocol Version 1.3
@@ -21,8 +21,8 @@ Abstract
    tampering, and message forgery.
 
    This document updates RFCs 5705, 6066, 7627, and 8422 and obsoletes
-   RFCs 5077, 5246, 6961, and 8446.  This document also specifies new
-   requirements for TLS 1.2 implementations.
+   RFCs 5077, 5246, 6961, 8422, and 8446.  This document also specifies
+   new requirements for TLS 1.2 implementations.
 
 Status of This Memo
 
@@ -39,11 +39,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 June 2024.
+   This Internet-Draft will expire on 28 January 2025.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -232,7 +232,7 @@ Table of Contents
    TLS consists of two primary components:
 
    *  A handshake protocol (Section 4) that authenticates the
-      communicating parties, negotiates cryptographic modes and
+      communicating parties, negotiates cryptographic algorithms and
       parameters, and establishes shared keying material.  The handshake
       protocol is designed to resist tampering; an active attacker
       should not be able to force the peers to negotiate different
@@ -253,8 +253,8 @@ Table of Contents
    of protocols that run on top of TLS.  Application protocols using TLS
    MUST specify how TLS works with their application protocol, including
    how and when handshaking occurs, and how to do identity verification.
-   [I-D.ietf-uta-rfc6125bis] provides useful guidance on integrating TLS
-   with application protocols.
+   [RFC9525] provides useful guidance on integrating TLS with
+   application protocols.
 
    This document defines TLS version 1.3.  While TLS 1.3 is not directly
    compatible with previous versions, all versions of TLS incorporate a
@@ -501,7 +501,7 @@ Auth | {CertificateVerify*}
    In the Key Exchange phase, the client sends the ClientHello
    (Section 4.1.2) message, which contains a random nonce
    (ClientHello.random); its offered protocol versions; a list of
-   symmetric cipher/HKDF hash pairs; either a list of Diffie-Hellman key
+   symmetric cipher/Hash pairs; either a list of Diffie-Hellman key
    shares (in the "key_share" (Section 4.2.8) extension), a list of pre-
    shared key labels (in the "pre_shared_key" (Section 4.2.11)
    extension), or both; and potentially additional extensions.
@@ -659,6 +659,7 @@ Auth | {CertificateVerify*}
    Subsequent Handshake:
           ClientHello
           + key_share*
+          + psk_key_exchange_modes
           + pre_shared_key          -------->
                                                           ServerHello
                                                      + pre_shared_key
@@ -1503,82 +1504,77 @@ Auth | {CertificateVerify*}
    which it appears, it MUST abort the handshake with an
    "illegal_parameter" alert.
 
-       +========================================+============+=====+
-       | Extension                              |    TLS 1.3 |     |
-       +========================================+============+=====+
-       | server_name [RFC6066]                  |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | max_fragment_length [RFC6066]          |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | status_request [RFC6066]               | CH, CR, CT |     |
-       +----------------------------------------+------------+-----+
-       | supported_groups [RFC7919]             |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | signature_algorithms (RFC8446)         |     CH, CR |     |
-       +----------------------------------------+------------+-----+
-       | use_srtp [RFC5764]                     |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | heartbeat [RFC6520]                    |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | application_layer_protocol_negotiation |     CH, EE |     |
-       | [RFC7301]                              |            |     |
-       +----------------------------------------+------------+-----+
-       | signed_certificate_timestamp [RFC6962] | CH, CR, CT |     |
-       +----------------------------------------+------------+-----+
-       | client_certificate_type [RFC7250]      |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | server_certificate_type [RFC7250]      |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | padding [RFC7685]                      |         CH |     |
-       +----------------------------------------+------------+-----+
-       | cached_info [RFC7924]                  |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | compress_certificate [RFC8879]         |     CH, CR |     |
-       +----------------------------------------+------------+-----+
-       | record_size_limit [RFC8849]            |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | delegated_credentials [RFC-TBD]        | CH, CR, CT |     |
-       +----------------------------------------+------------+-----+
-       | supported_ekt_ciphers                  |            | CH, |
-       |                                        |            | EE  |
-       +----------------------------------------+------------+-----+
-       | pre_shared_key [RFC 8446]              |     CH, SH |     |
-       +----------------------------------------+------------+-----+
-       | early_data [RFC 8446]                  |    CH, EE, |     |
-       |                                        |        NST |     |
-       +----------------------------------------+------------+-----+
-       | psk_key_exchange_modes [RFC 8446]      |         CH |     |
-       +----------------------------------------+------------+-----+
-       | cookie [RFC 8446]                      |    CH, HRR |     |
-       +----------------------------------------+------------+-----+
-       | supported_versions [RFC 8446]          |    CH, SH, |     |
-       |                                        |        HRR |     |
-       +----------------------------------------+------------+-----+
-       | certificate_authorities [RFC 8446]     |     CH, CR |     |
-       +----------------------------------------+------------+-----+
-       | oid_filters [RFC 8446]                 |         CR |     |
-       +----------------------------------------+------------+-----+
-       | post_handshake_auth [RFC 8446]         |         CH |     |
-       +----------------------------------------+------------+-----+
-       | signature_algorithms_cert [RFC 8446]   |     CH, CR |     |
-       +----------------------------------------+------------+-----+
-       | key_share [RFC 8446]                   |    CH, SH, |     |
-       |                                        |        HRR |     |
-       +----------------------------------------+------------+-----+
-       | transparency_info [RFC 9162]           | CH, CR, CT |     |
-       +----------------------------------------+------------+-----+
-       | connection_id [RFC 9146]               |     CH, SH |     |
-       +----------------------------------------+------------+-----+
-       | external_id_hash [RFC 8844]            |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | external_session_id [RFC 8844]         |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | quic_transport_parameters [RFC 9001]   |     CH, EE |     |
-       +----------------------------------------+------------+-----+
-       | ticket_request [RFC 9149]              |     CH, EE |     |
-       +----------------------------------------+------------+-----+
+    +==================================================+=============+
+    | Extension                                        |     TLS 1.3 |
+    +==================================================+=============+
+    | server_name [RFC6066]                            |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | max_fragment_length [RFC6066]                    |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | status_request [RFC6066]                         |  CH, CR, CT |
+    +--------------------------------------------------+-------------+
+    | supported_groups [RFC7919]                       |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | signature_algorithms [RFC8446]                   |      CH, CR |
+    +--------------------------------------------------+-------------+
+    | use_srtp [RFC5764]                               |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | heartbeat [RFC6520]                              |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | application_layer_protocol_negotiation [RFC7301] |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | signed_certificate_timestamp [RFC6962]           |  CH, CR, CT |
+    +--------------------------------------------------+-------------+
+    | client_certificate_type [RFC7250]                |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | server_certificate_type [RFC7250]                |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | padding [RFC7685]                                |          CH |
+    +--------------------------------------------------+-------------+
+    | cached_info [RFC7924]                            |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | compress_certificate [RFC8879]                   |      CH, CR |
+    +--------------------------------------------------+-------------+
+    | record_size_limit [RFC8849]                      |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | delegated_credentials [RFC9345]                  |  CH, CR, CT |
+    +--------------------------------------------------+-------------+
+    | supported_ekt_ciphers [RFC8870]                  |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | pre_shared_key [RFC8446]                         |      CH, SH |
+    +--------------------------------------------------+-------------+
+    | early_data [RFC8446]                             | CH, EE, NST |
+    +--------------------------------------------------+-------------+
+    | psk_key_exchange_modes [RFC8446]                 |          CH |
+    +--------------------------------------------------+-------------+
+    | cookie [RFC8446]                                 |     CH, HRR |
+    +--------------------------------------------------+-------------+
+    | supported_versions [RFC8446]                     | CH, SH, HRR |
+    +--------------------------------------------------+-------------+
+    | certificate_authorities [RFC8446]                |      CH, CR |
+    +--------------------------------------------------+-------------+
+    | oid_filters [RFC8446]                            |          CR |
+    +--------------------------------------------------+-------------+
+    | post_handshake_auth [RFC8446]                    |          CH |
+    +--------------------------------------------------+-------------+
+    | signature_algorithms_cert [RFC8446]              |      CH, CR |
+    +--------------------------------------------------+-------------+
+    | key_share [RFC8446]                              | CH, SH, HRR |
+    +--------------------------------------------------+-------------+
+    | transparency_info [RFC9162]                      |  CH, CR, CT |
+    +--------------------------------------------------+-------------+
+    | connection_id [RFC9146]                          |      CH, SH |
+    +--------------------------------------------------+-------------+
+    | external_id_hash [RFC8844]                       |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | external_session_id [RFC8844]                    |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | quic_transport_parameters [RFC9001]              |      CH, EE |
+    +--------------------------------------------------+-------------+
+    | ticket_request [RFC9149]                         |      CH, EE |
+    +--------------------------------------------------+-------------+
 
-                          Table 1: TLS Extensions
+                         Table 1: TLS Extensions
 
    Note: this table includes only extensions marked "Recommended" at the
    time of this writing.
@@ -2026,7 +2022,10 @@ Auth | {CertificateVerify*}
       0x01FF are reserved for Private Use.
 
    Items in "named_group_list" are ordered according to the sender's
-   preferences (most preferred choice first).
+   preferences (most preferred choice first).  The "named_group_list"
+   MUST NOT contain any duplicate entries.  A recipient MAY abort a
+   connection with a fatal illegal_parameter alert if it detects a
+   duplicate entry.
 
    As of TLS 1.3, servers are permitted to send the "supported_groups"
    extension to the client.  Clients MUST NOT act upon any information
@@ -2623,8 +2622,8 @@ Auth | {CertificateVerify*}
    contrary, servers which are authenticating with an external PSK MUST
    NOT send the CertificateRequest message either in the main handshake
    or request post-handshake authentication.  [RFC8773] provides an
-   extension to permit this, but has not received the level of analysis
-   as this specification.
+   extension to permit this, but has received less analysis than this
+   specification.
 
 4.4.  Authentication Messages
 
@@ -2637,7 +2636,8 @@ Auth | {CertificateVerify*}
    only sent under certain circumstances, as defined below.  The
    Finished message is always sent as part of the Authentication Block.
    These messages are encrypted under keys derived from the
-   [sender]_handshake_traffic_secret.
+   [sender]_handshake_traffic_secret, except for post-handshake
+   authentication.
 
    The computations for the Authentication messages all uniformly take
    the following inputs:
@@ -2666,25 +2666,25 @@ Auth | {CertificateVerify*}
    The following table defines the Handshake Context and MAC Base Key
    for each scenario:
 
-   +=========+====================+===================================+
-   |Mode     |Handshake Context   |Base Key                           |
-   +=========+====================+===================================+
-   |Server   |ClientHello ...     |server_handshake_traffic_secret    |
-   |         |later of            |                                   |
-   |         |EncryptedExtensions/|                                   |
-   |         |CertificateRequest  |                                   |
-   +---------+--------------------+-----------------------------------+
-   |Client   |ClientHello ...     |client_handshake_traffic_secret    |
-   |         |later of server     |                                   |
-   |         |Finished/           |                                   |
-   |         |EndOfEarlyData      |                                   |
-   +---------+--------------------+-----------------------------------+
-   |Post-    |ClientHello ...     |client_application_traffic_secret_N|
-   |Handshake|client Finished +   |                                   |
-   |         |CertificateRequest  |                                   |
-   +---------+--------------------+-----------------------------------+
+   +=========+====================+=====================================+
+   |Mode     |Handshake Context   |Base Key                             |
+   +=========+====================+=====================================+
+   |Server   |ClientHello ...     |server_handshake_traffic_secret      |
+   |         |later of            |                                     |
+   |         |EncryptedExtensions/|                                     |
+   |         |CertificateRequest  |                                     |
+   +---------+--------------------+-------------------------------------+
+   |Client   |ClientHello ...     |client_handshake_traffic_secret      |
+   |         |later of server     |                                     |
+   |         |Finished/           |                                     |
+   |         |EndOfEarlyData      |                                     |
+   +---------+--------------------+-------------------------------------+
+   |Post-    |ClientHello ...     |[sender]_application_traffic_secret_N|
+   |Handshake|client Finished +   |                                     |
+   |         |CertificateRequest  |                                     |
+   +---------+--------------------+-------------------------------------+
 
-                      Table 2: Authentication Inputs
+                       Table 2: Authentication Inputs
 
 4.4.1.  The Transcript Hash
 
@@ -2856,72 +2856,69 @@ Auth | {CertificateVerify*}
    in TLS 1.2 and below.  In TLS 1.3, the server's SCT information is
    carried in an extension in the CertificateEntry.
 
-4.4.2.2.  Server Certificate Selection
+4.4.2.2.  Certificate Selection
 
-   The following rules apply to the certificates sent by the server:
+   The following rules apply to the certificates sent by the client or
+   server:
 
    *  The certificate type MUST be X.509v3 [RFC5280], unless explicitly
       negotiated otherwise (e.g., [RFC7250]).
 
    *  The end-entity certificate MUST allow the key to be used for
-      signing with a signature scheme indicated in the client's
+      signing with a signature scheme indicated in the peer's
       "signature_algorithms" extension (see Section 4.2.3).  That is,
       the digitalSignature bit MUST be set if the Key Usage extension is
       present, and the public key (with associated restrictions) MUST be
       compatible with some supported signature scheme.
 
-   *  The "server_name" [RFC6066] and "certificate_authorities"
-      extensions are used to guide certificate selection.  As servers
-      MAY require the presence of the "server_name" extension, clients
-      SHOULD send this extension when the server is identified by name.
+   *  If the peer sent a "certificate_authorities" extension, at least
+      one of the certificates in the certificate chain SHOULD be issued
+      by one of the listed CAs.
 
-   All certificates provided by the server MUST be signed by a signature
-   algorithm advertised by the client, if it is able to provide such a
-   chain (see Section 4.2.3).  Certificates that are self-signed or
-   certificates that are expected to be trust anchors are not validated
-   as part of the chain and therefore MAY be signed with any algorithm.
-
-   If the server cannot produce a certificate chain that is signed only
-   via the indicated supported algorithms, then it SHOULD continue the
-   handshake by sending the client a certificate chain of its choice
-   that may include algorithms that are not known to be supported by the
-   client.  This fallback chain SHOULD NOT use the deprecated SHA-1 hash
-   algorithm in general, but MAY do so if the client's advertisement
-   permits it, and MUST NOT do so otherwise.
-
-   If the client cannot construct an acceptable chain using the provided
-   certificates and decides to abort the handshake, then it MUST abort
-   the handshake with an appropriate certificate-related alert (by
-   default, "unsupported_certificate"; see Section 6.2 for more
-   information).
-
-   If the server has multiple certificates, it chooses one of them based
-   on the above-mentioned criteria (in addition to other criteria, such
-   as transport-layer endpoint, local configuration, and preferences).
-
-4.4.2.3.  Client Certificate Selection
-
-   The following rules apply to certificates sent by the client:
-
-   *  The certificate type MUST be X.509v3 [RFC5280], unless explicitly
-      negotiated otherwise (e.g., [RFC7250]).
-
-   *  If the "certificate_authorities" extension in the
-      CertificateRequest message was present, at least one of the
-      certificates in the certificate chain SHOULD be issued by one of
-      the listed CAs.
-
-   *  The certificates MUST be signed using an acceptable signature
-      algorithm, as described in Section 4.3.2.  Note that this relaxes
-      the constraints on certificate-signing algorithms found in prior
-      versions of TLS.
+   The following rule additionally applies to certificates sent by the
+   client:
 
    *  If the CertificateRequest message contained a non-empty
       "oid_filters" extension, the end-entity certificate MUST match the
       extension OIDs that are recognized by the client, as described in
       Section 4.2.5.
 
-4.4.2.4.  Receiving a Certificate Message
+   The following rule additionally applies to certificates sent by the
+   server:
+
+   *  The "server_name" [RFC6066] extension is used to guide certificate
+      selection.  As servers MAY require the presence of the
+      "server_name" extension, clients SHOULD send this extension when
+      the server is identified by name.
+
+   All certificates provided by the sender MUST be signed by a signature
+   algorithm advertised by the peer, if it is able to provide such a
+   chain (see Section 4.2.3).  Certificates that are self-signed or
+   certificates that are expected to be trust anchors are not validated
+   as part of the chain and therefore MAY be signed with any algorithm.
+
+   If the sender is the server, and the server cannot produce a
+   certificate chain that is signed only via the indicated supported
+   algorithms, then it SHOULD continue the handshake by sending a
+   certificate chain of its choice that may include algorithms that are
+   not known to be supported by the client.  This fallback chain MUST
+   NOT use the deprecated SHA-1 hash, except if advertised by the
+   client, in which case it MAY.
+
+   If the sender is the client, the client MAY use a fallback chain as
+   above, or continue the handshake anonymously.
+
+   If the receiver cannot construct an acceptable chain using the
+   provided certificates and decides to abort the handshake, then it
+   MUST abort the handshake with an appropriate certificate-related
+   alert (by default, "unsupported_certificate"; see Section 6.2 for
+   more information).
+
+   If the sender has multiple certificates, it chooses one of them based
+   on the above-mentioned criteria (in addition to other criteria, such
+   as transport-layer endpoint, local configuration, and preferences).
+
+4.4.2.3.  Receiving a Certificate Message
 
    In general, detailed certificate validation procedures are out of
    scope for TLS (see [RFC5280]).  This section provides TLS-specific
@@ -3142,10 +3139,11 @@ Auth | {CertificateVerify*}
 
 4.6.1.  New Session Ticket Message
 
-   At any time after the server has received the client Finished
-   message, it MAY send a NewSessionTicket message.  This message
-   creates a unique association between the ticket value and a secret
-   PSK derived from the resumption secret (see Section 7).
+   If the client's hello contained a suitable "psk_key_exchange_modes"
+   extension, at any time after the server has received the client
+   Finished message, it MAY send a NewSessionTicket message.  This
+   message creates a unique association between the ticket value and a
+   secret PSK derived from the resumption secret (see Section 7).
 
    The client MAY use this PSK for future handshakes by including the
    ticket value in the "pre_shared_key" extension in its ClientHello
@@ -3319,13 +3317,18 @@ Auth | {CertificateVerify*}
    record.  This mechanism allows either side to force an update to the
    entire connection, but causes an implementation which receives
    multiple KeyUpdates while it is silent to respond with a single
-   update.  Note that implementations may receive an arbitrary number of
-   messages between sending a KeyUpdate with request_update set to
-   "update_requested" and receiving the peer's KeyUpdate, because those
-   messages may already be in flight.  However, because send and receive
-   keys are derived from independent traffic secrets, retaining the
-   receive traffic secret does not threaten the forward secrecy of data
-   sent before the sender changed keys.
+   update.  Until receiving a subsequent KeyUpdate from the peer, the
+   sender MUST NOT send another KeyUpdate with request_update set to
+   "update_requested".
+
+   Note that implementations may receive an arbitrary number of messages
+   between sending a KeyUpdate with request_update set to
+   "update_requested" and receiving the peer's KeyUpdate, including
+   unrelated KeyUpdates, because those messages may already be in
+   flight.  However, because send and receive keys are derived from
+   independent traffic secrets, retaining the receive traffic secret
+   does not threaten the forward secrecy of data sent before the sender
+   changed keys.
 
    If implementations independently send their own KeyUpdates with
    request_update set to "update_requested", and they cross in flight,
@@ -3423,10 +3426,11 @@ Auth | {CertificateVerify*}
 
    Application Data messages contain data that is opaque to TLS.
    Application Data messages are always protected.  Zero-length
-   fragments of Application Data MAY be sent, as they are potentially
-   useful as a traffic analysis countermeasure.  Application Data
-   fragments MAY be split across multiple records or coalesced into a
-   single record.
+   fragments of Application Data (i.e., TLSInnerPlaintext records of
+   type application_data with zero-length content) MAY be sent, as they
+   are potentially useful as a traffic analysis countermeasure.
+   Application Data fragments MAY be split across multiple records or
+   coalesced into a single record.
 
       enum {
           invalid(0),
@@ -3686,7 +3690,7 @@ Auth | {CertificateVerify*}
    Implementations MUST either close the connection or do a key update
    as described in Section 4.6.3 prior to reaching these limits.  Note
    that it is not possible to perform a KeyUpdate for early data and
-   therefore implementations MUST not exceed the limits when sending
+   therefore implementations MUST NOT exceed the limits when sending
    early data.  Receiving implementations SHOULD NOT enforce these
    limits, as future analyses may result in updated values.
 
@@ -3811,6 +3815,14 @@ Auth | {CertificateVerify*}
    connection, though doing so would introduce the possibility of
    truncation.
 
+   Application protocols MAY choose to flush their send buffers and
+   immediately send a close_notify upon receiving a close_notify, but
+   this allows an attacker to influence the data that the peer receives
+   by delaying the close_notify or by delaying the transport level
+   delivery of the application's packets.  These issues can be addressed
+   at the application layer, for instance by ignoring packets received
+   after transmitting the close_notify.
+
    If the application protocol using TLS provides that any data may be
    carried over the underlying transport after the TLS connection is
    closed, the TLS implementation MUST receive a "close_notify" alert
@@ -3925,10 +3937,9 @@ Auth | {CertificateVerify*}
       the offered TLS version or other negotiated parameters.
 
    unsupported_extension:  Sent by endpoints receiving any handshake
-      message containing an extension known to be prohibited for
-      inclusion in the given handshake message, or including any
-      extensions in a ServerHello or Certificate not first offered in
-      the corresponding ClientHello or CertificateRequest.
+      message containing an extension in a ServerHello,
+      HelloRetryRequest, EncryptedExtensions, or Certificate not first
+      offered in the corresponding ClientHello or CertificateRequest.
 
    unrecognized_name:  Sent by servers when no server exists identified
       by the name provided by the client via the "server_name" extension
@@ -4032,58 +4043,58 @@ Auth | {CertificateVerify*}
    the values are referred to as "main" secrets.  This mismatch is a
    result of renaming the values while retaining compatibility.
 
-                 0
-                 |
-                 v
-   PSK ->  HKDF-Extract = Early Secret
-                 |
-                 +-----> Derive-Secret(.,
-                 |                     "ext binder" |
-                 |                     "res binder",
-                 |                     "")
-                 |                     = binder_key
-                 |
-                 +-----> Derive-Secret(., "c e traffic",
-                 |                     ClientHello)
-                 |                     = client_early_traffic_secret
-                 |
-                 +-----> Derive-Secret(., "e exp master",
-                 |                     ClientHello)
-                 |                     = early_exporter_secret
-                 v
-           Derive-Secret(., "derived", "")
-                 |
-                 v
-(EC)DHE -> HKDF-Extract = Handshake Secret
-                 |
-                 +-----> Derive-Secret(., "c hs traffic",
-                 |                     ClientHello...ServerHello)
-                 |                     = client_handshake_traffic_secret
-                 |
-                 +-----> Derive-Secret(., "s hs traffic",
-                 |                     ClientHello...ServerHello)
-                 |                     = server_handshake_traffic_secret
-                 v
-           Derive-Secret(., "derived", "")
-                 |
-                 v
-      0 -> HKDF-Extract = Main Secret
-                 |
-                 +-----> Derive-Secret(., "c ap traffic",
-                 |                     ClientHello...server Finished)
-                 |                     = client_application_traffic_secret_0
-                 |
-                 +-----> Derive-Secret(., "s ap traffic",
-                 |                     ClientHello...server Finished)
-                 |                     = server_application_traffic_secret_0
-                 |
-                 +-----> Derive-Secret(., "exp master",
-                 |                     ClientHello...server Finished)
-                 |                     = exporter_secret
-                 |
-                 +-----> Derive-Secret(., "res master",
-                                       ClientHello...client Finished)
-                                       = resumption_secret
+                    0
+                    |
+                    v
+        PSK -->  HKDF-Extract = Early Secret
+                    |
+                    +-----> Derive-Secret(.,
+                    |                     "ext binder" |
+                    |                     "res binder",
+                    |                     "")
+                    |              = binder_key
+                    |
+                    +-----> Derive-Secret(., "c e traffic",
+                    |                     ClientHello)
+                    |              = client_early_traffic_secret
+                    |
+                    +-----> Derive-Secret(., "e exp master",
+                    |                     ClientHello)
+                    |              = early_exporter_secret
+                    v
+               Derive-Secret(., "derived", "")
+                    |
+                    v
+     (EC)DHE --> HKDF-Extract = Handshake Secret
+                    |
+                    +-----> Derive-Secret(., "c hs traffic",
+                    |                     ClientHello...ServerHello)
+                    |              = client_handshake_traffic_secret
+                    |
+                    +-----> Derive-Secret(., "s hs traffic",
+                    |                     ClientHello...ServerHello)
+                    |              = server_handshake_traffic_secret
+                    v
+               Derive-Secret(., "derived", "")
+                    |
+                    v
+           0 --> HKDF-Extract = Main Secret
+                    |
+                    +-----> Derive-Secret(., "c ap traffic",
+                    |                     ClientHello...server Finished)
+                    |              = client_application_traffic_secret_0
+                    |
+                    +-----> Derive-Secret(., "s ap traffic",
+                    |                     ClientHello...server Finished)
+                    |              = server_application_traffic_secret_0
+                    |
+                    +-----> Derive-Secret(., "exp master",
+                    |                     ClientHello...server Finished)
+                    |              = exporter_secret
+                    |
+                    +-----> Derive-Secret(., "res master",
+                                          ClientHello...client Finished)
+                                   = resumption_secret
 
    The general pattern here is that the secrets shown down the left side
    of the diagram are just raw entropy without context, whereas the
@@ -4666,13 +4677,13 @@ Auth | {CertificateVerify*}
       any extension not listed there marked as "-" to indicate that it
       is not used by TLS 1.3.
 
-   This document updates an entry in the TLS Certificate Types registry
-   originally created in [RFC6091] and updated in [RFC8447].  IANA has
-   updated the entry for value 1 to have the name "OpenPGP_RESERVED",
-   "Recommended" value "N", and comment "Used in TLS versions prior to
-   1.3."  IANA has updated the entry for value 0 to have the name
-   "X509", "Recommended" value "Y", and comment "Was X.509 before TLS
-   1.3".
+   This document updates two entries in the TLS Certificate Types
+   registry originally created in [RFC6091] and updated in [RFC8447].
+   IANA has updated the entry for value 1 to have the name
+   "OpenPGP_RESERVED", "Recommended" value "N", and comment "Used in TLS
+   versions prior to 1.3."  IANA has updated the entry for value 0 to
+   have the name "X509", "Recommended" value "Y", and comment "Was X.509
+   before TLS 1.3".
 
    This document updates an entry in the TLS Certificate Status Types
    registry originally created in [RFC6961].  IANA has updated the entry
@@ -4875,7 +4886,7 @@ Auth | {CertificateVerify*}
    [AEAD-LIMITS]
               Luykx, A. and K. Paterson, "Limits on Authenticated
               Encryption Use in TLS", August 2017,
-              <http://www.isg.rhul.ac.uk/~kp/TLS-AEbounds.pdf>.
+              <https://eprint.iacr.org/2024/051.pdf>.
 
    [BBFGKZ16] Bhargavan, K., Brzuska, C., Fournet, C., Green, M.,
               Kohlweiss, M., and S. Zanella-Beguelin, "Downgrade
@@ -4994,13 +5005,14 @@ Auth | {CertificateVerify*}
               DOI 10.6028/nist.fips.186-5, February 2023,
               <https://doi.org/10.6028/nist.fips.186-5>.
 
-   [ECDP]     Moody, D., "Recommendations for Discrete Logarithm-based
+   [ECDP]     Chen, L., Moody, D., Regenscheid, A., Robinson, A., and K.
+              Randall, "Recommendations for Discrete Logarithm-based
               Cryptography:: Elliptic Curve Domain Parameters", National
               Institute of Standards and Technology,
-              DOI 10.6028/nist.sp.800-186, 2022,
+              DOI 10.6028/nist.sp.800-186, February 2023,
               <https://doi.org/10.6028/nist.sp.800-186>.
 
-   [FETCH]    WHATWG, "Fetch Standard", November 2023,
+   [FETCH]    WHATWG, "Fetch Standard", July 2024,
               <https://fetch.spec.whatwg.org/>.
 
    [FG17]     Fischlin, M. and F. Guenther, "Replay Attacks on Zero
@@ -5032,16 +5044,9 @@ Auth | {CertificateVerify*}
    [I-D.ietf-tls-esni]
               Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
               Encrypted Client Hello", Work in Progress, Internet-Draft,
-              draft-ietf-tls-esni-17, 9 October 2023,
+              draft-ietf-tls-esni-18, 4 March 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
-              esni-17>.
-
-   [I-D.ietf-uta-rfc6125bis]
-              Saint-Andre, P. and R. Salz, "Service Identity in TLS",
-              Work in Progress, Internet-Draft, draft-ietf-uta-
-              rfc6125bis-15, 10 August 2023,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-uta-
-              rfc6125bis-15>.
+              esni-18>.
 
    [JSS15]    Jager, T., Schwenk, J., and J. Somorovsky, "On the
               Security of TLS 1.3 and QUIC Against Weaknesses in PKCS#1
@@ -5183,11 +5188,6 @@ Auth | {CertificateVerify*}
               DOI 10.17487/RFC6520, February 2012,
               <https://www.rfc-editor.org/rfc/rfc6520>.
 
-   [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
-              Protocol (HTTP/1.1): Message Syntax and Routing",
-              RFC 7230, DOI 10.17487/RFC7230, June 2014,
-              <https://www.rfc-editor.org/rfc/rfc7230>.
-
    [RFC7250]  Wouters, P., Ed., Tschofenig, H., Ed., Gilmore, J.,
               Weiler, S., and T. Kivinen, "Using Raw Public Keys in
               Transport Layer Security (TLS) and Datagram Transport
@@ -5251,6 +5251,21 @@ Auth | {CertificateVerify*}
               DOI 10.17487/RFC8773, March 2020,
               <https://www.rfc-editor.org/rfc/rfc8773>.
 
+   [RFC8844]  Thomson, M. and E. Rescorla, "Unknown Key-Share Attacks on
+              Uses of TLS with the Session Description Protocol (SDP)",
+              RFC 8844, DOI 10.17487/RFC8844, January 2021,
+              <https://www.rfc-editor.org/rfc/rfc8844>.
+
+   [RFC8849]  Even, R. and J. Lennox, "Mapping RTP Streams to
+              Controlling Multiple Streams for Telepresence (CLUE) Media
+              Captures", RFC 8849, DOI 10.17487/RFC8849, January 2021,
+              <https://www.rfc-editor.org/rfc/rfc8849>.
+
+   [RFC8870]  Jennings, C., Mattsson, J., McGrew, D., Wing, D., and F.
+              Andreasen, "Encrypted Key Transport for DTLS and Secure
+              RTP", RFC 8870, DOI 10.17487/RFC8870, January 2021,
+              <https://www.rfc-editor.org/rfc/rfc8870>.
+
    [RFC8879]  Ghedini, A. and V. Vasiliev, "TLS Certificate
               Compression", RFC 8879, DOI 10.17487/RFC8879, December
               2020, <https://www.rfc-editor.org/rfc/rfc8879>.
@@ -5259,6 +5274,36 @@ Auth | {CertificateVerify*}
               and C. Wood, "Randomness Improvements for Security
               Protocols", RFC 8937, DOI 10.17487/RFC8937, October 2020,
               <https://www.rfc-editor.org/rfc/rfc8937>.
+
+   [RFC9001]  Thomson, M., Ed. and S. Turner, Ed., "Using TLS to Secure
+              QUIC", RFC 9001, DOI 10.17487/RFC9001, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9001>.
+
+   [RFC9112]  Fielding, R., Ed., Nottingham, M., Ed., and J. Reschke,
+              Ed., "HTTP/1.1", STD 99, RFC 9112, DOI 10.17487/RFC9112,
+              June 2022, <https://www.rfc-editor.org/rfc/rfc9112>.
+
+   [RFC9146]  Rescorla, E., Ed., Tschofenig, H., Ed., Fossati, T., and
+              A. Kraus, "Connection Identifier for DTLS 1.2", RFC 9146,
+              DOI 10.17487/RFC9146, March 2022,
+              <https://www.rfc-editor.org/rfc/rfc9146>.
+
+   [RFC9149]  Pauly, T., Schinazi, D., and C.A. Wood, "TLS Ticket
+              Requests", RFC 9149, DOI 10.17487/RFC9149, April 2022,
+              <https://www.rfc-editor.org/rfc/rfc9149>.
+
+   [RFC9162]  Laurie, B., Messeri, E., and R. Stradling, "Certificate
+              Transparency Version 2.0", RFC 9162, DOI 10.17487/RFC9162,
+              December 2021, <https://www.rfc-editor.org/rfc/rfc9162>.
+
+   [RFC9345]  Barnes, R., Iyengar, S., Sullivan, N., and E. Rescorla,
+              "Delegated Credentials for TLS and DTLS", RFC 9345,
+              DOI 10.17487/RFC9345, July 2023,
+              <https://www.rfc-editor.org/rfc/rfc9345>.
+
+   [RFC9525]  Saint-Andre, P. and R. Salz, "Service Identity in TLS",
+              RFC 9525, DOI 10.17487/RFC9525, November 2023,
+              <https://www.rfc-editor.org/rfc/rfc9525>.
 
    [RSA]      Rivest, R., Shamir, A., and L. Adleman, "A method for
               obtaining digital signatures and public-key
@@ -5305,26 +5350,26 @@ A.1.  Client
                Send ClientHello |        | Recv HelloRetryRequest
           [K_send = early data] |        |
                                 v        |
-           /                 WAIT_SH ----+
+           +->               WAIT_SH ----+
            |                    | Recv ServerHello
            |                    | K_recv = handshake
        Can |                    V
       send |                 WAIT_EE
      early |                    | Recv EncryptedExtensions
-      data |           +--------+--------+
-           |     Using |                 | Using certificate
-           |       PSK |                 v
-           |           |            WAIT_CERT_CR
-           |           |        Recv |       | Recv CertificateRequest
-           |           | Certificate |       v
-           |           |             |    WAIT_CERT
-           |           |             |       | Recv Certificate
-           |           |             v       v
-           |           |              WAIT_CV
-           |           |                 | Recv CertificateVerify
-           |           +> WAIT_FINISHED <+
+      data |          +---------+-------+
+           |    Using |                 | Using certificate
+           |      PSK |                 v
+           |          |            WAIT_CERT_CR
+           |          |        Recv |       | Recv CertificateRequest
+           |          | Certificate |       v
+           |          |             |    WAIT_CERT
+           |          |             |       | Recv Certificate
+           |          |             v       v
+           |          |              WAIT_CV
+           |          |                   | Recv CertificateVerify
+           |          +-> WAIT_FINISHED <-+
            |                  | Recv Finished
-           \                  | [Send EndOfEarlyData]
+           +->                | [Send EndOfEarlyData]
                               | K_send = handshake
                               | [Send Certificate [+ CertificateVerify]]
     Can send                  | Send Finished
@@ -5357,12 +5402,12 @@ A.2.  Server
               No 0-RTT |                 | 0-RTT
                        |                 |
    K_recv = handshake  |                 | K_recv = early data
- [Skip decrypt errors] |    +------> WAIT_EOED -+
-                       |    |       Recv |      | Recv EndOfEarlyData
-                       |    | early data |      | K_recv = handshake
-                       |    +------------+      |
-                       |                        |
-                       +> WAIT_FLIGHT2 <--------+
+ [Skip decrypt errors] |    +------> WAIT_EOED --+
+                       |    |       Recv |       | Recv EndOfEarlyData
+                       |    | early data |       | K_recv = handshake
+                       |    +------------+       |
+                       |                         |
+                       +-> WAIT_FLIGHT2 <--------+
                                 |
                        +--------+--------+
                No auth |                 | Cert-based client auth
@@ -6008,7 +6053,7 @@ C.4.  Client and Server Tracking Prevention
    a ticket allows passive observers to correlate different connections.
    Servers that issue tickets SHOULD offer at least as many tickets as
    the number of connections that a client might use; for example, a web
-   browser using HTTP/1.1 [RFC7230] might open six connections to a
+   browser using HTTP/1.1 [RFC9112] might open six connections to a
    server.  Servers SHOULD issue new tickets with every connection.
    This ensures that clients are always able to use a new ticket when
    creating a new connection.
@@ -6026,11 +6071,21 @@ C.4.  Client and Server Tracking Prevention
    same server additionally allows the server to correlate different
    connections.
 
+   It is RECOMMENDED that the labels for external identities be selected
+   so that they do not provide additional information about the identity
+   of the user.  For instance, if the label includes an e-mail address,
+   then this trivially identifies the user to a passive attacker, unlike
+   the client's Certificate, which is encrypted.  There are a number of
+   potential ways to avoid this risk, including (1) using random
+   identity labels (2) pre-encrypting the identity under a key known to
+   the server or (3) using the Encrypted Client Hello
+   [I-D.ietf-tls-esni] extension.
+
    If an external PSK identity is used for multiple connections, then it
    will generally be possible for an external observer to track clients
    and/or servers across connections.  Use of the Encrypted Client Hello
    [I-D.ietf-tls-esni] extension can mitigate this risk, as can
-   mechanisms external to TLS that rotate the PSK identity.
+   mechanisms external to TLS that rotate or encrypt the PSK identity.
 
 C.5.  Unauthenticated Operation
 
@@ -6788,7 +6843,7 @@ F.7.  Sharing PSKs
 F.8.  Attacks on Static RSA
 
    Although TLS 1.3 does not use RSA key transport and so is not
-   directly susceptible to Bleichenbacher-type attacks [Blei98]if TLS
+   directly susceptible to Bleichenbacher-type attacks [Blei98] if TLS
    1.3 servers also support static RSA in the context of previous
    versions of TLS, then it may be possible to impersonate the server
    for TLS 1.3 connections [JSS15].  TLS 1.3 implementations can prevent
@@ -6826,8 +6881,8 @@ Appendix G.  Change Log
 
    *  Reference RFC 8773 (PR 1296)
 
-   *  Add some more information about application bindings and cite
-      6125-bis (PR 1297)
+   *  Add some more information about application bindings and cite RFC
+      9525 (PR 1297)
 
    Since -04
 
