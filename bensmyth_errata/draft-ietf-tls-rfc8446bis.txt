@@ -501,7 +501,7 @@ Auth | {CertificateVerify*}
    In the Key Exchange phase, the client sends the ClientHello
    (Section 4.1.2) message, which contains a random nonce
    (ClientHello.random); its offered protocol versions; a list of
-   symmetric cipher/Hash pairs; either a list of Diffie-Hellman key
+   symmetric cipher/hash pairs; either a list of Diffie-Hellman key
    shares (in the "key_share" (Section 4.2.8) extension), a list of pre-
    shared key labels (in the "pre_shared_key" (Section 4.2.11)
    extension), or both; and potentially additional extensions.
