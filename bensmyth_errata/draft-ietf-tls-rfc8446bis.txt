@@ -4,10 +4,10 @@
 
 Transport Layer Security                                     E. Rescorla
 Internet-Draft                                   Windy Hill Systems, LLC
-Obsoletes: 8446 (if approved)                               27 July 2024
+Obsoletes: 8446 (if approved)                               31 July 2024
 Updates: 5705, 6066, 7627, 8422 (if approved)                           
 Intended status: Standards Track                                        
-Expires: 28 January 2025
+Expires: 1 February 2025
 
 
         The Transport Layer Security (TLS) Protocol Version 1.3
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 January 2025.
+   This Internet-Draft will expire on 1 February 2025.
 
 Copyright Notice
 
@@ -2902,8 +2902,8 @@ Auth | {CertificateVerify*}
    algorithms, then it SHOULD continue the handshake by sending a
    certificate chain of its choice that may include algorithms that are
    not known to be supported by the client.  This fallback chain MUST
-   NOT use the deprecated SHA-1 hash, except if advertised by the
-   client, in which case it MAY.
+   NOT use the deprecated SHA-1 hash, unless the client specifically
+   advertises that it is willing to accept SHA-1.
 
    If the sender is the client, the client MAY use a fallback chain as
    above, or continue the handshake anonymously.
