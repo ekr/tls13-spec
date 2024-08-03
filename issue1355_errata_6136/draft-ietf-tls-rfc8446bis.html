@@ -3036,8 +3036,9 @@ In TLS 1.3, the TLS server indicates its version using the
 and the legacy_version field MUST
 be set to 0x0303, which is the version number for TLS 1.2.
 (See <a href="#backward-compatibility" class="auto internal xref">Appendix E</a> for details about backward compatibility.)
-A client which receives a legacy_version value not equal to 0x0303 MUST abort
-the handshake with an "illegal_parameter" alert.<a href="#section-4.1.3-4.2.1" class="pilcrow">¶</a></p>
+A client which receives a TLS 1.3 Server Hello with a legacy_version
+value not equal to 0x0303 MUST abort the handshake with an
+"illegal_parameter" alert.<a href="#section-4.1.3-4.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-4.1.3-4.3">random:</dt>
