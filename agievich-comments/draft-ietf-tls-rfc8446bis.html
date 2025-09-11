@@ -15,22 +15,22 @@ tampering, and message forgery.
 RFCs 5077, 5246, 6961, 8422, and 8446. This document also specifies
 new requirements for TLS 1.2 implementations. 
     " name="description">
-<meta content="xml2rfc 3.28.1" name="generator">
+<meta content="xml2rfc 3.30.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-tls-rfc8446bis-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.28.1
-    Python 3.12.10
+  xml2rfc 3.30.1
+    Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
-    lxml 5.3.0
-    platformdirs 4.3.8
+    lxml 5.3.1
+    platformdirs 4.4.0
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.3
-    setuptools 70.3.0
+    requests 2.32.5
+    setuptools 80.9.0
     wcwidth 0.2.13
 -->
 <link href="draft-ietf-tls-rfc8446bis.xml" rel="alternate" type="application/rfc+xml">
@@ -1050,11 +1050,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">TLS</td>
-<td class="right">May 2025</td>
+<td class="right">September 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rescorla</td>
-<td class="center">Expires 1 December 2025</td>
+<td class="center">Expires 15 March 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1073,12 +1073,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc5705" class="eref">5705</a>, <a href="https://www.rfc-editor.org/rfc/rfc6066" class="eref">6066</a>, <a href="https://www.rfc-editor.org/rfc/rfc7627" class="eref">7627</a>, <a href="https://www.rfc-editor.org/rfc/rfc8422" class="eref">8422</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-05-30" class="published">30 May 2025</time>
+<time datetime="2025-09-11" class="published">11 September 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-01">1 December 2025</time></dd>
+<dd class="expires"><time datetime="2026-03-15">15 March 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1118,7 +1118,7 @@ new requirements for TLS 1.2 implementations.<a href="#section-abstract-2" class
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1573,13 +1573,16 @@ new requirements for TLS 1.2 implementations.<a href="#section-abstract-2" class
                 <p id="section-toc.1-1.18.2.6.1"><a href="#appendix-F.6" class="auto internal xref">F.6</a>.  <a href="#name-psk-identity-exposure" class="internal xref">PSK Identity Exposure</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.7">
-                <p id="section-toc.1-1.18.2.7.1"><a href="#appendix-F.7" class="auto internal xref">F.7</a>.  <a href="#name-sharing-psks" class="internal xref">Sharing PSKs</a></p>
+                <p id="section-toc.1-1.18.2.7.1"><a href="#appendix-F.7" class="auto internal xref">F.7</a>.  <a href="#name-sharing-psks-across-protoco" class="internal xref">Sharing PSKs Across Protocol Versions</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.8">
-                <p id="section-toc.1-1.18.2.8.1"><a href="#appendix-F.8" class="auto internal xref">F.8</a>.  <a href="#name-misbinding-when-using-self-" class="internal xref">Misbinding when using Self-Signed Certificates or Raw Public Keys</a></p>
+                <p id="section-toc.1-1.18.2.8.1"><a href="#appendix-F.8" class="auto internal xref">F.8</a>.  <a href="#name-external-psks-and-rerouting" class="internal xref">External PSKs and Rerouting</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.9">
-                <p id="section-toc.1-1.18.2.9.1"><a href="#appendix-F.9" class="auto internal xref">F.9</a>.  <a href="#name-attacks-on-static-rsa" class="internal xref">Attacks on Static RSA</a></p>
+                <p id="section-toc.1-1.18.2.9.1"><a href="#appendix-F.9" class="auto internal xref">F.9</a>.  <a href="#name-misbinding-when-using-self-" class="internal xref">Misbinding when using Self-Signed Certificates or Raw Public Keys</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.10">
+                <p id="section-toc.1-1.18.2.10.1"><a href="#appendix-F.10" class="auto internal xref">F.10</a>. <a href="#name-attacks-on-static-rsa" class="internal xref">Attacks on Static RSA</a></p>
 </li>
             </ul>
 </li>
@@ -1624,7 +1627,7 @@ Algorithm (EdDSA) <span>[<a href="#RFC8032" class="cite xref">RFC8032</a>]</span
           <p id="section-1-3.2.1">Confidentiality: Data sent over the channel after establishment
 is only visible to the
 endpoints. TLS does not hide the length of the data it transmits,
-though endpoints are able to pad TLS records in order to obscure lengths
+though endpoints are able to pad TLS records to obscure lengths
 and improve protection against traffic analysis techniques.<a href="#section-1-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-3.3">
@@ -1729,19 +1732,21 @@ key usage limits to MUST.<a href="#section-1.2-2.4.1" class="pilcrow">¶</a></p>
             <p id="section-1.2-2.5.1">Limit the number of permitted KeyUpdate messages.<a href="#section-1.2-2.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.2-2.6">
-            <p id="section-1.2-2.6.1">Restore text defining the level of "close_notify" to "warning".
-Clarify behavior around "user_canceled", requiring that
-"close_notify" be sent and that "user_canceled" should
-be ignored.<a href="#section-1.2-2.6.1" class="pilcrow">¶</a></p>
+            <p id="section-1.2-2.6.1">Restore text defining the level of "close_notify" to "warning".<a href="#section-1.2-2.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.2-2.7">
-            <p id="section-1.2-2.7.1">Add a "general_error" generic alert.<a href="#section-1.2-2.7.1" class="pilcrow">¶</a></p>
+            <p id="section-1.2-2.7.1">Clarify behavior around "user_canceled", requiring that
+"close_notify" be sent and that "user_canceled" should
+be ignored.<a href="#section-1.2-2.7.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.2-2.8">
-            <p id="section-1.2-2.8.1">Corrected the lower bound on CertificateRequest.extensions
+            <p id="section-1.2-2.8.1">Add a "general_error" generic alert.<a href="#section-1.2-2.8.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.2-2.9">
+            <p id="section-1.2-2.9.1">Corrected the lower bound on CertificateRequest.extensions
 to be 0 bytes. This was an error in the syntax as it
 is possible to send no extensions, which results in
-length 0.<a href="#section-1.2-2.8.1" class="pilcrow">¶</a></p>
+length 0.<a href="#section-1.2-2.9.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-1.2-3">In addition, there have been some improvements to the
@@ -1792,7 +1797,7 @@ be more consistent and to remove superfluous messages such as
 ChangeCipherSpec (except when needed for middlebox compatibility).<a href="#section-1.3-2.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.3-2.7">
-            <p id="section-1.3-2.7.1">Elliptic curve algorithms are now in the base spec, and new signature
+            <p id="section-1.3-2.7.1">Elliptic curve algorithms are now in the base spec and new signature
 algorithms, such as EdDSA, are included. TLS 1.3 removed point format
 negotiation in favor of a single point format for each curve.<a href="#section-1.3-2.7.1" class="pilcrow">¶</a></p>
 </li>
@@ -2081,8 +2086,8 @@ certificate. [<a href="#certificate-verify" class="auto internal xref">Section 4
 <dt id="section-2-14.5">Finished:</dt>
         <dd style="margin-left: 1.5em" id="section-2-14.6">
           <p id="section-2-14.6.1">A MAC (Message Authentication Code) over the entire handshake.
-This message provides key confirmation, binds the endpoint's identity
-to the exchanged keys, and in PSK mode
+This message provides key confirmation for the shared secrets established in the handshake
+binds the endpoint's identity to the exchanged keys, and in PSK mode
 also authenticates the handshake. [<a href="#finished" class="auto internal xref">Section 4.4.4</a>]<a href="#section-2-14.6.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
@@ -2190,7 +2195,7 @@ from the initial handshake is used to bootstrap the cryptographic state
 instead of a full handshake.
 In TLS 1.2 and below, this functionality was provided by "session IDs" and
 "session tickets" <span>[<a href="#RFC5077" class="cite xref">RFC5077</a>]</span>. Both mechanisms are obsoleted in TLS 1.3.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2-2">PSKs can be used with (EC)DHE key exchange in order to provide forward
+<p id="section-2.2-2">PSKs can be used with (EC)DHE key exchange to provide forward
 secrecy in combination with shared keys, or can be used alone, at the
 cost of losing forward secrecy for the application data.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.2-3"><a href="#tls-resumption-psk" class="auto internal xref">Figure 3</a> shows a pair of handshakes in which the first handshake establishes
@@ -3096,8 +3101,8 @@ alert.<a href="#section-4.1.3-4.8.1" class="pilcrow">¶</a></p>
             <dd class="break"></dd>
 <dt id="section-4.1.3-4.9">legacy_compression_method:</dt>
             <dd style="margin-left: 1.5em" id="section-4.1.3-4.10">
-              <p id="section-4.1.3-4.10.1">A single byte which MUST have the value 0. If a TLS 1.3 ClientHello
-is received with any other value in this field, the server MUST
+              <p id="section-4.1.3-4.10.1">A single byte which MUST have the value 0. If a TLS 1.3 ServerHello
+is received with any other value in this field, the client MUST
 abort the handshake with an "illegal_parameter" alert.<a href="#section-4.1.3-4.10.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
@@ -3185,7 +3190,7 @@ discuss "HelloRetryRequest" throughout this document as if it were
 a distinct message.<a href="#section-4.1.4-1" class="pilcrow">¶</a></p>
 <p id="section-4.1.4-2">The server's extensions MUST contain "supported_versions".
 Additionally, it SHOULD contain the minimal set of extensions necessary for the
-client to generate a correct ClientHello pair. As with the ServerHello, a
+client to generate a correct ClientHello pair. The ServerHello, a
 HelloRetryRequest MUST NOT contain any extensions that were not first
 offered by the client in its ClientHello, with the exception of
 optionally the "cookie" (see <a href="#cookie" class="auto internal xref">Section 4.2.2</a>) extension.<a href="#section-4.1.4-2" class="pilcrow">¶</a></p>
@@ -3582,7 +3587,7 @@ to support prior versions of TLS SHOULD support TLS 1.2.
 Servers MUST be prepared to receive ClientHellos that include this
 extension but do not include 0x0304 in the list of versions.<a href="#section-4.2.1-4" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-5">A server which negotiates a version of TLS prior to TLS 1.3 MUST
-set ServerHello.version and MUST NOT send the "supported_versions"
+set ServerHello.legacy_version and MUST NOT send the "supported_versions"
 extension. A server which negotiates TLS 1.3 MUST respond by sending a
 "supported_versions" extension containing the selected version value
 (0x0304). It MUST set the ServerHello.legacy_version field to 0x0303 (TLS
@@ -3590,7 +3595,7 @@ extension. A server which negotiates TLS 1.3 MUST respond by sending a
 <p id="section-4.2.1-6">After checking ServerHello.random to determine if the server handshake message
 is a ServerHello or HelloRetryRequest, clients MUST check for this extension
 prior to processing the rest of the ServerHello. This will require clients to
-parse the ServerHello in order to read the extension.
+parse the ServerHello to read the extension.
 If this extension is present, clients MUST ignore the
 ServerHello.legacy_version value and MUST use only the
 "supported_versions" extension to determine the selected version. If the
@@ -4017,7 +4022,7 @@ supported by the client.<a href="#section-4.2.7-7" class="pilcrow">¶</a></p>
 <a href="#section-4.2.8" class="section-number selfRef">4.2.8. </a><a href="#name-key-share" class="section-name selfRef">Key Share</a>
           </h4>
 <p id="section-4.2.8-1">The "key_share" extension contains the endpoint's cryptographic parameters.<a href="#section-4.2.8-1" class="pilcrow">¶</a></p>
-<p id="section-4.2.8-2">Clients MAY send an empty client_shares list in order to request
+<p id="section-4.2.8-2">Clients MAY send an empty client_shares list to request
 group selection from the server, at the cost of an additional round trip
 (see <a href="#hello-retry-request" class="auto internal xref">Section 4.1.4</a>).<a href="#section-4.2.8-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-4.2.8-3">
@@ -4074,7 +4079,7 @@ Selecting a group based on KeyShareEntry may result in the use of
 a less preferred group than the client and server mutually support,
 though saving the round trip of HelloRetryRequest. Servers
 that wish to respect the client's group preferences SHOULD first
-select a group based "supported_groups" and then either send a
+select a group based on "supported_groups" and then either send a
 ServerHello or a HelloRetryRequest depending on the contents of
 KeyshareClienthello.<a href="#section-4.2.8-9" class="pilcrow">¶</a></p>
 <p id="section-4.2.8-10">Clients can offer as many KeyShareEntry values as the number of supported
@@ -4198,7 +4203,7 @@ that for Q = (x, y) both integers x and y are in the correct interval, and (3)
 ensure that (x, y) is a correct solution to the elliptic curve
 equation.  For these curves, implementors do not need to verify
 membership in the correct subgroup.<a href="#section-4.2.8.2-5" class="pilcrow">¶</a></p>
-<p id="section-4.2.8.2-6">For X25519 and X448, the contents of the public value is the K_A
+<p id="section-4.2.8.2-6">For X25519 and X448, the content of the public value is the K_A
 or K_B value described in Section 6 of <span>[<a href="#RFC7748" class="cite xref">RFC7748</a>]</span>.
 This is 32 bytes for X25519 and 56 bytes for X448.<a href="#section-4.2.8.2-6" class="pilcrow">¶</a></p>
 <p id="section-4.2.8.2-7">Note: Versions of TLS prior to 1.3 permitted point format negotiation;
@@ -4213,7 +4218,7 @@ for each curve.<a href="#section-4.2.8.2-7" class="pilcrow">¶</a></p>
           <h4 id="name-pre-shared-key-exchange-mod">
 <a href="#section-4.2.9" class="section-number selfRef">4.2.9. </a><a href="#name-pre-shared-key-exchange-mod" class="section-name selfRef">Pre-Shared Key Exchange Modes</a>
           </h4>
-<p id="section-4.2.9-1">In order to use PSKs, clients MUST also send a "psk_key_exchange_modes"
+<p id="section-4.2.9-1">To use PSKs, clients MUST also send a "psk_key_exchange_modes"
 extension. The semantics of this extension are that the client only
 supports the use of PSKs with these modes, which restricts both the
 use of PSKs offered in this ClientHello and those which the server
@@ -4486,7 +4491,7 @@ SHOULD select a single PSK and validate solely the binder that
 corresponds to that PSK.
 See <a href="#client-hello-recording" class="auto internal xref">Section 8.2</a> and <a href="#psk-identity-exposure" class="auto internal xref">Appendix F.6</a> for the
 security rationale for this requirement.
-In order to accept PSK key establishment, the
+To accept PSK key establishment, the
 server sends a "pre_shared_key" extension indicating the selected
 identity.<a href="#section-4.2.11-8" class="pilcrow">¶</a></p>
 <p id="section-4.2.11-9">Clients MUST verify that the server's selected_identity is within the
@@ -4665,7 +4670,7 @@ unless used for the post-handshake authentication exchanges
 described in <a href="#post-handshake-authentication" class="auto internal xref">Section 4.6.2</a>.
 When requesting post-handshake authentication, the server SHOULD
 make the context unpredictable to the client (e.g., by
-randomly generating it) in order to prevent an attacker who
+randomly generating it) to prevent an attacker who
 has temporary access to the client's private key from
 pre-computing valid CertificateVerify messages.<a href="#section-4.3.2-4.2.1" class="pilcrow">¶</a></p>
 </dd>
@@ -4827,7 +4832,7 @@ ClientHello and including only those messages that were sent:
 ClientHello, HelloRetryRequest, ClientHello, ServerHello,
 EncryptedExtensions, server CertificateRequest, server Certificate,
 server CertificateVerify, server Finished, EndOfEarlyData, client
-Certificate, client CertificateVerify, client Finished.<a href="#section-4.4.1-6" class="pilcrow">¶</a></p>
+Certificate, client CertificateVerify, and client Finished.<a href="#section-4.4.1-6" class="pilcrow">¶</a></p>
 <p id="section-4.4.1-7">In general, implementations can implement the transcript by keeping a
 running transcript hash value based on the negotiated hash. Note,
 however, that subsequent post-handshake authentications do not include
@@ -5296,7 +5301,7 @@ original connection is still open. Servers MAY send multiple tickets on a
 single connection, either immediately after each other or
 after specific events (see <a href="#client-tracking" class="auto internal xref">Appendix C.4</a>).
 For instance, the server might send a new ticket after post-handshake
-authentication in order to encapsulate the additional client
+authentication thus encapsulating the additional client
 authentication state. Multiple tickets are useful for clients
 for a variety of purposes, including:<a href="#section-4.6.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -5350,7 +5355,7 @@ handshake, for example.<a href="#section-4.6.1-7" class="pilcrow">¶</a></p>
 network byte order from the time of ticket issuance.
 Servers MUST NOT use any value greater than 604800 seconds (7 days).
 The value of zero indicates that the ticket should be discarded
-immediately. Clients MUST NOT use tickets for longer than
+immediately fater use. Clients MUST NOT use tickets for longer than
 7 days after issuance, regardless of the ticket_lifetime, and MAY delete tickets
 earlier based on local policy. A server MAY treat a ticket as valid
 for a shorter period of time than what is stated in the
@@ -5435,7 +5440,8 @@ client MUST respond with the appropriate Authentication messages (see
 send Certificate, CertificateVerify, and Finished. If it declines, it MUST send
 a Certificate message containing no certificates followed by Finished.
 All of the client's messages for a given response
-MUST appear consecutively on the wire with no intervening messages of other types.<a href="#section-4.6.2-1" class="pilcrow">¶</a></p>
+MUST appear consecutively on the wire with no intervening messages of other type
+or from other responses.<a href="#section-4.6.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.6.2-2">A client that receives a CertificateRequest message without having sent
 the "post_handshake_auth" extension MUST send an "unexpected_message" fatal
 alert.<a href="#section-4.6.2-2" class="pilcrow">¶</a></p>
@@ -5509,8 +5515,8 @@ attacks.<a href="#section-4.6.3-7" class="pilcrow">¶</a></p>
 <p id="section-4.6.3-8">With a 128-bit key as in AES-128, rekeying 2^64 times has a high
 probability of key reuse within a given connection.  Note that even
 if the key repeats, the IV is also independently generated, so the
-chance of a joint key/IV collision is much lower.  In order
-to provide an extra margin of security, sending implementations MUST
+chance of a joint key/IV collision is much lower.
+To provide an extra margin of security, sending implementations MUST
 NOT allow the epoch -- and hence the number of key updates --
 to exceed 2^48-1.  In order to allow this value to be changed later
 -- for instance for ciphers with more than 128-bit keys --
@@ -5658,7 +5664,7 @@ specified by the type field.<a href="#section-5.1-8.8.1" class="pilcrow">¶</a><
 </dl>
 <p id="section-5.1-9">This document describes TLS 1.3, which uses the version 0x0304.
 This version value is historical, deriving from the use of 0x0301
-for TLS 1.0 and 0x0300 for SSL 3.0. In order to maximize backward
+for TLS 1.0 and 0x0300 for SSL 3.0. To maximize backward
 compatibility, a record containing an initial ClientHello SHOULD have version
 0x0301 (reflecting TLS 1.0) and a record containing a second ClientHello or
 a ServerHello MUST have version
@@ -5788,7 +5794,7 @@ lengths of plaintext. Symbolically,<a href="#section-5.2-7" class="pilcrow">¶</
 </pre><a href="#section-5.2-8" class="pilcrow">¶</a>
 </div>
 <p id="section-5.2-9">The encrypted_record field of TLSCiphertext is set to AEADEncrypted.<a href="#section-5.2-9" class="pilcrow">¶</a></p>
-<p id="section-5.2-10">In order to decrypt and verify, the cipher takes as input the key, nonce,
+<p id="section-5.2-10">To decrypt and verify, the cipher takes as input the key, nonce,
 additional data, and the AEADEncrypted value. The output is either the plaintext
 or an error indicating that the decryption failed. There is no separate
 integrity check. Symbolically,<a href="#section-5.2-10" class="pilcrow">¶</a></p>
@@ -6026,8 +6032,7 @@ though they MAY log or otherwise record them.<a href="#section-6.1-2.4.1" class=
         <dd class="break"></dd>
 </dl>
 <p id="section-6.1-3">Either party MAY initiate a close of its write side of the connection by
-sending a "close_notify" alert. Any data received after a "close_notify" alert has
-been received MUST be ignored. If a transport-level close is received prior
+sending a "close_notify" alert. If a transport-level close is received prior
 to a "close_notify", the receiver cannot know that all the data that was sent
 has been received.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.1-4">Each party MUST send a "close_notify" alert before closing its write side
@@ -6340,8 +6345,8 @@ the resumption_secret value from a previous connection)<a href="#section-7.1-7.1
             <p id="section-7.1-7.2.1">(EC)DHE shared secret (<a href="#ecdhe-shared-secret-calculation" class="auto internal xref">Section 7.4</a>)<a href="#section-7.1-7.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.1-8">This produces a full key derivation schedule shown in the diagram below.
-In this diagram, the following formatting conventions apply:<a href="#section-7.1-8" class="pilcrow">¶</a></p>
+<p id="section-7.1-8">This produces the key schedule shown in the diagram below
+(<a href="#key-schedule-diagram" class="auto internal xref">Figure 5</a>. In this diagram, the following formatting conventions apply:<a href="#section-7.1-8" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.1-9.1">
             <p id="section-7.1-9.1.1">HKDF-Extract is drawn as taking the Salt argument from the top and
@@ -6360,139 +6365,148 @@ generating the client_early_traffic_secret.<a href="#section-7.1-9.2.1" class="p
 <p id="section-7.1-10">Note: the key derivation labels use the string "master" even though
 the values are referred to as "main" secrets.  This mismatch is a
 result of renaming the values while retaining compatibility.<a href="#section-7.1-10" class="pilcrow">¶</a></p>
-<div id="section-7.1-11">
-          <div class="alignLeft art-svg artwork" id="section-7.1-11.1">
+<p id="section-7.1-11">Note: this does not show all the leaf keys such as the separate
+AEAD and IV keys but rather the first set of secrets derived
+from the handshake.<a href="#section-7.1-11" class="pilcrow">¶</a></p>
+<span id="name-main-tls-13-key-schedule"></span><div id="key-schedule-diagram">
+<figure id="figure-5">
+          <div id="section-7.1-12.1">
+            <div class="alignLeft art-svg artwork" id="section-7.1-12.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="880" width="544" viewBox="0 0 544 880" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-              <path d="M 128,48 L 128,64" fill="none" stroke="black"></path>
-              <path d="M 128,96 L 128,320" fill="none" stroke="black"></path>
-              <path d="M 128,352 L 128,368" fill="none" stroke="black"></path>
-              <path d="M 128,400 L 128,528" fill="none" stroke="black"></path>
-              <path d="M 128,560 L 128,576" fill="none" stroke="black"></path>
-              <path d="M 128,608 L 128,816" fill="none" stroke="black"></path>
-              <path d="M 64,80 L 80,80" fill="none" stroke="black"></path>
-              <path d="M 128,112 L 176,112" fill="none" stroke="black"></path>
-              <path d="M 128,208 L 176,208" fill="none" stroke="black"></path>
-              <path d="M 128,272 L 176,272" fill="none" stroke="black"></path>
-              <path d="M 72,384 L 88,384" fill="none" stroke="black"></path>
-              <path d="M 128,416 L 176,416" fill="none" stroke="black"></path>
-              <path d="M 128,480 L 176,480" fill="none" stroke="black"></path>
-              <path d="M 72,592 L 88,592" fill="none" stroke="black"></path>
-              <path d="M 128,624 L 176,624" fill="none" stroke="black"></path>
-              <path d="M 128,688 L 176,688" fill="none" stroke="black"></path>
-              <path d="M 128,752 L 176,752" fill="none" stroke="black"></path>
-              <path d="M 128,816 L 176,816" fill="none" stroke="black"></path>
-              <polygon class="arrowhead" points="184,816 172,810.4 172,821.6" fill="black" transform="rotate(0,176,816)"></polygon>
-              <polygon class="arrowhead" points="184,752 172,746.4 172,757.6" fill="black" transform="rotate(0,176,752)"></polygon>
-              <polygon class="arrowhead" points="184,688 172,682.4 172,693.6" fill="black" transform="rotate(0,176,688)"></polygon>
-              <polygon class="arrowhead" points="184,624 172,618.4 172,629.6" fill="black" transform="rotate(0,176,624)"></polygon>
-              <polygon class="arrowhead" points="184,480 172,474.4 172,485.6" fill="black" transform="rotate(0,176,480)"></polygon>
-              <polygon class="arrowhead" points="184,416 172,410.4 172,421.6" fill="black" transform="rotate(0,176,416)"></polygon>
-              <polygon class="arrowhead" points="184,272 172,266.4 172,277.6" fill="black" transform="rotate(0,176,272)"></polygon>
-              <polygon class="arrowhead" points="184,208 172,202.4 172,213.6" fill="black" transform="rotate(0,176,208)"></polygon>
-              <polygon class="arrowhead" points="184,112 172,106.4 172,117.6" fill="black" transform="rotate(0,176,112)"></polygon>
-              <polygon class="arrowhead" points="136,576 124,570.4 124,581.6" fill="black" transform="rotate(90,128,576)"></polygon>
-              <polygon class="arrowhead" points="136,528 124,522.4 124,533.6" fill="black" transform="rotate(90,128,528)"></polygon>
-              <polygon class="arrowhead" points="136,368 124,362.4 124,373.6" fill="black" transform="rotate(90,128,368)"></polygon>
-              <polygon class="arrowhead" points="136,320 124,314.4 124,325.6" fill="black" transform="rotate(90,128,320)"></polygon>
-              <polygon class="arrowhead" points="136,64 124,58.4 124,69.6" fill="black" transform="rotate(90,128,64)"></polygon>
-              <polygon class="arrowhead" points="96,592 84,586.4 84,597.6" fill="black" transform="rotate(0,88,592)"></polygon>
-              <polygon class="arrowhead" points="96,384 84,378.4 84,389.6" fill="black" transform="rotate(0,88,384)"></polygon>
-              <polygon class="arrowhead" points="88,80 76,74.4 76,85.6" fill="black" transform="rotate(0,80,80)"></polygon>
-              <g class="text">
-                <text x="128" y="36">0</text>
-                <text x="40" y="84">PSK</text>
-                <text x="148" y="84">HKDF-Extract</text>
-                <text x="208" y="84">=</text>
-                <text x="240" y="84">Early</text>
-                <text x="292" y="84">Secret</text>
-                <text x="252" y="116">Derive-Secret(.,</text>
-                <text x="316" y="132">"ext</text>
-                <text x="368" y="132">binder"</text>
-                <text x="408" y="132">|</text>
-                <text x="316" y="148">"res</text>
-                <text x="372" y="148">binder",</text>
-                <text x="312" y="164">"")</text>
-                <text x="248" y="180">=</text>
-                <text x="300" y="180">binder_key</text>
-                <text x="252" y="212">Derive-Secret(.,</text>
-                <text x="332" y="212">"c</text>
-                <text x="352" y="212">e</text>
-                <text x="400" y="212">traffic",</text>
-                <text x="348" y="228">ClientHello)</text>
-                <text x="248" y="244">=</text>
-                <text x="368" y="244">client_early_traffic_secret</text>
-                <text x="252" y="276">Derive-Secret(.,</text>
-                <text x="332" y="276">"e</text>
-                <text x="360" y="276">exp</text>
-                <text x="412" y="276">master",</text>
-                <text x="348" y="292">ClientHello)</text>
-                <text x="248" y="308">=</text>
-                <text x="344" y="308">early_exporter_secret</text>
-                <text x="148" y="340">Derive-Secret(.,</text>
-                <text x="260" y="340">"derived",</text>
-                <text x="320" y="340">"")</text>
-                <text x="32" y="388">(EC)DHE</text>
-                <text x="148" y="388">HKDF-Extract</text>
-                <text x="208" y="388">=</text>
-                <text x="256" y="388">Handshake</text>
-                <text x="324" y="388">Secret</text>
-                <text x="252" y="420">Derive-Secret(.,</text>
-                <text x="332" y="420">"c</text>
-                <text x="356" y="420">hs</text>
-                <text x="408" y="420">traffic",</text>
-                <text x="404" y="436">ClientHello...ServerHello)</text>
-                <text x="248" y="452">=</text>
-                <text x="384" y="452">client_handshake_traffic_secret</text>
-                <text x="252" y="484">Derive-Secret(.,</text>
-                <text x="332" y="484">"s</text>
-                <text x="356" y="484">hs</text>
-                <text x="408" y="484">traffic",</text>
-                <text x="404" y="500">ClientHello...ServerHello)</text>
-                <text x="248" y="516">=</text>
-                <text x="384" y="516">server_handshake_traffic_secret</text>
-                <text x="148" y="548">Derive-Secret(.,</text>
-                <text x="260" y="548">"derived",</text>
-                <text x="320" y="548">"")</text>
-                <text x="56" y="596">0</text>
-                <text x="148" y="596">HKDF-Extract</text>
-                <text x="208" y="596">=</text>
-                <text x="236" y="596">Main</text>
-                <text x="284" y="596">Secret</text>
-                <text x="252" y="628">Derive-Secret(.,</text>
-                <text x="332" y="628">"c</text>
-                <text x="356" y="628">ap</text>
-                <text x="408" y="628">traffic",</text>
-                <text x="380" y="644">ClientHello...server</text>
-                <text x="504" y="644">Finished)</text>
-                <text x="248" y="660">=</text>
-                <text x="400" y="660">client_application_traffic_secret_0</text>
-                <text x="252" y="692">Derive-Secret(.,</text>
-                <text x="332" y="692">"s</text>
-                <text x="356" y="692">ap</text>
-                <text x="408" y="692">traffic",</text>
-                <text x="380" y="708">ClientHello...server</text>
-                <text x="504" y="708">Finished)</text>
-                <text x="248" y="724">=</text>
-                <text x="400" y="724">server_application_traffic_secret_0</text>
-                <text x="252" y="756">Derive-Secret(.,</text>
-                <text x="340" y="756">"exp</text>
-                <text x="396" y="756">master",</text>
-                <text x="380" y="772">ClientHello...server</text>
-                <text x="504" y="772">Finished)</text>
-                <text x="248" y="788">=</text>
-                <text x="320" y="788">exporter_secret</text>
-                <text x="252" y="820">Derive-Secret(.,</text>
-                <text x="340" y="820">"res</text>
-                <text x="396" y="820">master",</text>
-                <text x="380" y="836">ClientHello...client</text>
-                <text x="504" y="836">Finished)</text>
-                <text x="248" y="852">=</text>
-                <text x="328" y="852">resumption_secret</text>
-              </g>
-            </svg><a href="#section-7.1-11.1" class="pilcrow">¶</a>
+                <path d="M 128,48 L 128,64" fill="none" stroke="black"></path>
+                <path d="M 128,96 L 128,320" fill="none" stroke="black"></path>
+                <path d="M 128,352 L 128,368" fill="none" stroke="black"></path>
+                <path d="M 128,400 L 128,528" fill="none" stroke="black"></path>
+                <path d="M 128,560 L 128,576" fill="none" stroke="black"></path>
+                <path d="M 128,608 L 128,816" fill="none" stroke="black"></path>
+                <path d="M 64,80 L 80,80" fill="none" stroke="black"></path>
+                <path d="M 128,112 L 176,112" fill="none" stroke="black"></path>
+                <path d="M 128,208 L 176,208" fill="none" stroke="black"></path>
+                <path d="M 128,272 L 176,272" fill="none" stroke="black"></path>
+                <path d="M 72,384 L 88,384" fill="none" stroke="black"></path>
+                <path d="M 128,416 L 176,416" fill="none" stroke="black"></path>
+                <path d="M 128,480 L 176,480" fill="none" stroke="black"></path>
+                <path d="M 72,592 L 88,592" fill="none" stroke="black"></path>
+                <path d="M 128,624 L 176,624" fill="none" stroke="black"></path>
+                <path d="M 128,688 L 176,688" fill="none" stroke="black"></path>
+                <path d="M 128,752 L 176,752" fill="none" stroke="black"></path>
+                <path d="M 128,816 L 176,816" fill="none" stroke="black"></path>
+                <polygon class="arrowhead" points="184,816 172,810.4 172,821.6" fill="black" transform="rotate(0,176,816)"></polygon>
+                <polygon class="arrowhead" points="184,752 172,746.4 172,757.6" fill="black" transform="rotate(0,176,752)"></polygon>
+                <polygon class="arrowhead" points="184,688 172,682.4 172,693.6" fill="black" transform="rotate(0,176,688)"></polygon>
+                <polygon class="arrowhead" points="184,624 172,618.4 172,629.6" fill="black" transform="rotate(0,176,624)"></polygon>
+                <polygon class="arrowhead" points="184,480 172,474.4 172,485.6" fill="black" transform="rotate(0,176,480)"></polygon>
+                <polygon class="arrowhead" points="184,416 172,410.4 172,421.6" fill="black" transform="rotate(0,176,416)"></polygon>
+                <polygon class="arrowhead" points="184,272 172,266.4 172,277.6" fill="black" transform="rotate(0,176,272)"></polygon>
+                <polygon class="arrowhead" points="184,208 172,202.4 172,213.6" fill="black" transform="rotate(0,176,208)"></polygon>
+                <polygon class="arrowhead" points="184,112 172,106.4 172,117.6" fill="black" transform="rotate(0,176,112)"></polygon>
+                <polygon class="arrowhead" points="136,576 124,570.4 124,581.6" fill="black" transform="rotate(90,128,576)"></polygon>
+                <polygon class="arrowhead" points="136,528 124,522.4 124,533.6" fill="black" transform="rotate(90,128,528)"></polygon>
+                <polygon class="arrowhead" points="136,368 124,362.4 124,373.6" fill="black" transform="rotate(90,128,368)"></polygon>
+                <polygon class="arrowhead" points="136,320 124,314.4 124,325.6" fill="black" transform="rotate(90,128,320)"></polygon>
+                <polygon class="arrowhead" points="136,64 124,58.4 124,69.6" fill="black" transform="rotate(90,128,64)"></polygon>
+                <polygon class="arrowhead" points="96,592 84,586.4 84,597.6" fill="black" transform="rotate(0,88,592)"></polygon>
+                <polygon class="arrowhead" points="96,384 84,378.4 84,389.6" fill="black" transform="rotate(0,88,384)"></polygon>
+                <polygon class="arrowhead" points="88,80 76,74.4 76,85.6" fill="black" transform="rotate(0,80,80)"></polygon>
+                <g class="text">
+                  <text x="128" y="36">0</text>
+                  <text x="40" y="84">PSK</text>
+                  <text x="148" y="84">HKDF-Extract</text>
+                  <text x="208" y="84">=</text>
+                  <text x="240" y="84">Early</text>
+                  <text x="292" y="84">Secret</text>
+                  <text x="252" y="116">Derive-Secret(.,</text>
+                  <text x="316" y="132">"ext</text>
+                  <text x="368" y="132">binder"</text>
+                  <text x="408" y="132">|</text>
+                  <text x="316" y="148">"res</text>
+                  <text x="372" y="148">binder",</text>
+                  <text x="312" y="164">"")</text>
+                  <text x="248" y="180">=</text>
+                  <text x="300" y="180">binder_key</text>
+                  <text x="252" y="212">Derive-Secret(.,</text>
+                  <text x="332" y="212">"c</text>
+                  <text x="352" y="212">e</text>
+                  <text x="400" y="212">traffic",</text>
+                  <text x="348" y="228">ClientHello)</text>
+                  <text x="248" y="244">=</text>
+                  <text x="368" y="244">client_early_traffic_secret</text>
+                  <text x="252" y="276">Derive-Secret(.,</text>
+                  <text x="332" y="276">"e</text>
+                  <text x="360" y="276">exp</text>
+                  <text x="412" y="276">master",</text>
+                  <text x="348" y="292">ClientHello)</text>
+                  <text x="248" y="308">=</text>
+                  <text x="344" y="308">early_exporter_secret</text>
+                  <text x="148" y="340">Derive-Secret(.,</text>
+                  <text x="260" y="340">"derived",</text>
+                  <text x="320" y="340">"")</text>
+                  <text x="32" y="388">(EC)DHE</text>
+                  <text x="148" y="388">HKDF-Extract</text>
+                  <text x="208" y="388">=</text>
+                  <text x="256" y="388">Handshake</text>
+                  <text x="324" y="388">Secret</text>
+                  <text x="252" y="420">Derive-Secret(.,</text>
+                  <text x="332" y="420">"c</text>
+                  <text x="356" y="420">hs</text>
+                  <text x="408" y="420">traffic",</text>
+                  <text x="404" y="436">ClientHello...ServerHello)</text>
+                  <text x="248" y="452">=</text>
+                  <text x="384" y="452">client_handshake_traffic_secret</text>
+                  <text x="252" y="484">Derive-Secret(.,</text>
+                  <text x="332" y="484">"s</text>
+                  <text x="356" y="484">hs</text>
+                  <text x="408" y="484">traffic",</text>
+                  <text x="404" y="500">ClientHello...ServerHello)</text>
+                  <text x="248" y="516">=</text>
+                  <text x="384" y="516">server_handshake_traffic_secret</text>
+                  <text x="148" y="548">Derive-Secret(.,</text>
+                  <text x="260" y="548">"derived",</text>
+                  <text x="320" y="548">"")</text>
+                  <text x="56" y="596">0</text>
+                  <text x="148" y="596">HKDF-Extract</text>
+                  <text x="208" y="596">=</text>
+                  <text x="236" y="596">Main</text>
+                  <text x="284" y="596">Secret</text>
+                  <text x="252" y="628">Derive-Secret(.,</text>
+                  <text x="332" y="628">"c</text>
+                  <text x="356" y="628">ap</text>
+                  <text x="408" y="628">traffic",</text>
+                  <text x="380" y="644">ClientHello...server</text>
+                  <text x="504" y="644">Finished)</text>
+                  <text x="248" y="660">=</text>
+                  <text x="400" y="660">client_application_traffic_secret_0</text>
+                  <text x="252" y="692">Derive-Secret(.,</text>
+                  <text x="332" y="692">"s</text>
+                  <text x="356" y="692">ap</text>
+                  <text x="408" y="692">traffic",</text>
+                  <text x="380" y="708">ClientHello...server</text>
+                  <text x="504" y="708">Finished)</text>
+                  <text x="248" y="724">=</text>
+                  <text x="400" y="724">server_application_traffic_secret_0</text>
+                  <text x="252" y="756">Derive-Secret(.,</text>
+                  <text x="340" y="756">"exp</text>
+                  <text x="396" y="756">master",</text>
+                  <text x="380" y="772">ClientHello...server</text>
+                  <text x="504" y="772">Finished)</text>
+                  <text x="248" y="788">=</text>
+                  <text x="320" y="788">exporter_secret</text>
+                  <text x="252" y="820">Derive-Secret(.,</text>
+                  <text x="340" y="820">"res</text>
+                  <text x="396" y="820">master",</text>
+                  <text x="380" y="836">ClientHello...client</text>
+                  <text x="504" y="836">Finished)</text>
+                  <text x="248" y="852">=</text>
+                  <text x="328" y="852">resumption_secret</text>
+                </g>
+              </svg><a href="#section-7.1-12.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-7.1-12">The general pattern here is that the secrets shown down the left side
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<a href="#name-main-tls-13-key-schedule" class="selfRef">Main TLS 1.3 Key Schedule</a>
+          </figcaption></figure>
+</div>
+<p id="section-7.1-13">The general pattern here is that the secrets shown down the left side
 of the diagram are just raw entropy without context, whereas the
 secrets down the right side include Handshake Context and therefore
 can be used to derive working keys without additional context.
@@ -6500,21 +6514,21 @@ Note that the different
 calls to Derive-Secret may take different Messages arguments,
 even with the same secret. In a 0-RTT exchange, Derive-Secret is
 called with four distinct transcripts; in a 1-RTT-only exchange,
-it is called with three distinct transcripts.<a href="#section-7.1-12" class="pilcrow">¶</a></p>
-<p id="section-7.1-13">If a given secret is not available, then the 0-value consisting of
+it is called with three distinct transcripts.<a href="#section-7.1-13" class="pilcrow">¶</a></p>
+<p id="section-7.1-14">If a given secret is not available, then the 0-value consisting of
 a string of Hash.length bytes set to zeros is used.  Note that this does not mean skipping
 rounds, so if PSK is not in use, Early Secret will still be
 HKDF-Extract(0, 0). For the computation of the binder_key, the label is
 "ext binder" for external PSKs (those provisioned outside of TLS)
 and "res binder" for resumption PSKs (those provisioned as the resumption
 secret of a previous handshake). The different labels prevent
-the substitution of one type of PSK for the other.<a href="#section-7.1-13" class="pilcrow">¶</a></p>
-<p id="section-7.1-14">There are multiple potential Early Secret values, depending on
+the substitution of one type of PSK for the other.<a href="#section-7.1-14" class="pilcrow">¶</a></p>
+<p id="section-7.1-15">There are multiple potential Early Secret values, depending on
 which PSK the server ultimately selects. The client will need to compute
 one for each potential PSK; if no PSK is selected, it will then need to
-compute the Early Secret corresponding to the zero PSK.<a href="#section-7.1-14" class="pilcrow">¶</a></p>
-<p id="section-7.1-15">Once all the values which are to be derived from a given secret have
-been computed, that secret SHOULD be erased.<a href="#section-7.1-15" class="pilcrow">¶</a></p>
+compute the Early Secret corresponding to the zero PSK.<a href="#section-7.1-15" class="pilcrow">¶</a></p>
+<p id="section-7.1-16">Once all the values which are to be derived from a given secret have
+been computed, that secret SHOULD be erased.<a href="#section-7.1-16" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="updating-traffic-keys">
@@ -6523,7 +6537,7 @@ been computed, that secret SHOULD be erased.<a href="#section-7.1-15" class="pil
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-updating-traffic-secrets" class="section-name selfRef">Updating Traffic Secrets</a>
         </h3>
 <p id="section-7.2-1">Once the handshake is complete, it is possible for either side to
-update its sending traffic keys using the KeyUpdate handshake message
+update its sending traffic key using the KeyUpdate handshake message
 defined in <a href="#key-update" class="auto internal xref">Section 4.6.3</a>.  The next generation of traffic keys is computed by
 generating client_/server_application_traffic_secret_N+1 from
 client_/server_application_traffic_secret_N as described in
@@ -6793,7 +6807,7 @@ binder) and reject duplicates. Recording all ClientHellos causes state
 to grow without bound, but a server can instead record ClientHellos within
 a given time window and use the "obfuscated_ticket_age" to ensure that
 tickets aren't reused outside that window.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2">In order to implement this, when a ClientHello is received, the server
+<p id="section-8.2-2">To implement this, when a ClientHello is received, the server
 first verifies the PSK binder as described in
 <a href="#pre-shared-key-extension" class="auto internal xref">Section 4.2.11</a>. It then computes the
 expected_arrival_time as described in the next section and rejects
@@ -6865,7 +6879,7 @@ described in <a href="#client-hello-recording" class="auto internal xref">Sectio
 needs to store an unlimited number of ClientHellos, and is a useful optimization for
 self-contained single-use tickets because it allows efficient rejection of ClientHellos
 which cannot be used for 0-RTT.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
-<p id="section-8.3-2">In order to implement this mechanism, a server needs to store the time
+<p id="section-8.3-2">To implement this mechanism, a server needs to store the time
 that the server generated the session ticket, offset by an estimate of
 the round-trip time between client and server. I.e.,<a href="#section-8.3-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.3-3">
@@ -7215,7 +7229,8 @@ for a Y-&gt;N transition.<a href="#section-11-10.2.1" class="pilcrow">¶</a></p>
         <h3 id="name-changes-for-this-rfc">
 <a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-changes-for-this-rfc" class="section-name selfRef">Changes for this RFC</a>
         </h3>
-<p id="section-11.1-1">IANA [shall update/has updated] the TLS registries to reference this document.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
+<p id="section-11.1-1">IANA [shall update/has updated] all references to RFC 8446 in the IANA
+registries with references to this document.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
 <p id="section-11.1-2">IANA [shall rename/has renamed] the "extended_master_secret" value
 in the TLS ExtensionType Values registry to "extended_main_secret".<a href="#section-11.1-2" class="pilcrow">¶</a></p>
 <p id="section-11.1-3">IANA [shall create/has created] a value for the "general_error"
@@ -7446,7 +7461,7 @@ alert in the TLS Alerts Registry with the value given in <a href="#alert-protoco
 <dd class="break"></dd>
 <dt id="FETCH">[FETCH]</dt>
         <dd>
-<span class="refAuthor">WHATWG</span>, <span class="refTitle">"Fetch Standard"</span>, <time datetime="2025-05" class="refDate">May 2025</time>, <span>&lt;<a href="https://fetch.spec.whatwg.org/">https://fetch.spec.whatwg.org/</a>&gt;</span>. </dd>
+<span class="refAuthor">WHATWG</span>, <span class="refTitle">"Fetch Standard"</span>, <time datetime="2025-09" class="refDate">September 2025</time>, <span>&lt;<a href="https://fetch.spec.whatwg.org/">https://fetch.spec.whatwg.org/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="FG17">[FG17]</dt>
         <dd>
@@ -7470,7 +7485,7 @@ alert in the TLS Alerts Registry with the value given in <a href="#alert-protoco
 <dd class="break"></dd>
 <dt id="I-D.ietf-tls-esni">[I-D.ietf-tls-esni]</dt>
         <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Oku, K.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"TLS Encrypted Client Hello"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-esni-24</span>, <time datetime="2025-03-20" class="refDate">20 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-24">https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-24</a>&gt;</span>. </dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Oku, K.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"TLS Encrypted Client Hello"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-esni-25</span>, <time datetime="2025-06-14" class="refDate">14 June 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-25">https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-25</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="JSS15">[JSS15]</dt>
         <dd>
@@ -7616,10 +7631,6 @@ alert in the TLS Alerts Registry with the value given in <a href="#alert-protoco
         <dd>
 <span class="refAuthor">Nir, Y.</span>, <span class="refAuthor">Josefsson, S.</span>, and <span class="refAuthor">M. Pegourie-Gonnard</span>, <span class="refTitle">"Elliptic Curve Cryptography (ECC) Cipher Suites for Transport Layer Security (TLS) Versions 1.2 and Earlier"</span>, <span class="seriesInfo">RFC 8422</span>, <span class="seriesInfo">DOI 10.17487/RFC8422</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8422">https://www.rfc-editor.org/rfc/rfc8422</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8444">[RFC8444]</dt>
-        <dd>
-<span class="refAuthor">Psenak, P., Ed.</span>, <span class="refAuthor">Kumar, N.</span>, <span class="refAuthor">Wijnands, IJ.</span>, <span class="refAuthor">Dolganow, A.</span>, <span class="refAuthor">Przygienda, T.</span>, <span class="refAuthor">Zhang, J.</span>, and <span class="refAuthor">S. Aldrin</span>, <span class="refTitle">"OSPFv2 Extensions for Bit Index Explicit Replication (BIER)"</span>, <span class="seriesInfo">RFC 8444</span>, <span class="seriesInfo">DOI 10.17487/RFC8444</span>, <time datetime="2018-11" class="refDate">November 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8444">https://www.rfc-editor.org/rfc/rfc8444</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC8446">[RFC8446]</dt>
         <dd>
 <span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8446">https://www.rfc-editor.org/rfc/rfc8446</a>&gt;</span>. </dd>
@@ -7684,6 +7695,14 @@ alert in the TLS Alerts Registry with the value given in <a href="#alert-protoco
         <dd>
 <span class="refAuthor">Laurie, B.</span>, <span class="refAuthor">Messeri, E.</span>, and <span class="refAuthor">R. Stradling</span>, <span class="refTitle">"Certificate Transparency Version 2.0"</span>, <span class="seriesInfo">RFC 9162</span>, <span class="seriesInfo">DOI 10.17487/RFC9162</span>, <time datetime="2021-12" class="refDate">December 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9162">https://www.rfc-editor.org/rfc/rfc9162</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC9257">[RFC9257]</dt>
+        <dd>
+<span class="refAuthor">Housley, R.</span>, <span class="refAuthor">Hoyland, J.</span>, <span class="refAuthor">Sethi, M.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Guidance for External Pre-Shared Key (PSK) Usage in TLS"</span>, <span class="seriesInfo">RFC 9257</span>, <span class="seriesInfo">DOI 10.17487/RFC9257</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9257">https://www.rfc-editor.org/rfc/rfc9257</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9258">[RFC9258]</dt>
+        <dd>
+<span class="refAuthor">Benjamin, D.</span> and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Importing External Pre-Shared Keys (PSKs) for TLS 1.3"</span>, <span class="seriesInfo">RFC 9258</span>, <span class="seriesInfo">DOI 10.17487/RFC9258</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9258">https://www.rfc-editor.org/rfc/rfc9258</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC9345">[RFC9345]</dt>
         <dd>
 <span class="refAuthor">Barnes, R.</span>, <span class="refAuthor">Iyengar, S.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">E. Rescorla</span>, <span class="refTitle">"Delegated Credentials for TLS and DTLS"</span>, <span class="seriesInfo">RFC 9345</span>, <span class="seriesInfo">DOI 10.17487/RFC9345</span>, <time datetime="2023-07" class="refDate">July 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9345">https://www.rfc-editor.org/rfc/rfc9345</a>&gt;</span>. </dd>
@@ -7695,6 +7714,10 @@ alert in the TLS Alerts Registry with the value given in <a href="#alert-protoco
 <dt id="RSA">[RSA]</dt>
         <dd>
 <span class="refAuthor">Rivest, R.</span>, <span class="refAuthor">Shamir, A.</span>, and <span class="refAuthor">L. Adleman</span>, <span class="refTitle">"A method for obtaining digital signatures and public-key cryptosystems"</span>, <span class="refContent">Association for Computing Machinery (ACM)</span>, <span class="seriesInfo">Communications of the ACM vol. 21, no. 2, pp. 120-126</span>, <span class="seriesInfo">DOI 10.1145/359340.359342</span>, <time datetime="1978-02" class="refDate">February 1978</time>, <span>&lt;<a href="https://doi.org/10.1145/359340.359342">https://doi.org/10.1145/359340.359342</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="Selfie">[Selfie]</dt>
+        <dd>
+<span class="refAuthor">Drucker, N.</span> and <span class="refAuthor">S. Gueron</span>, <span class="refTitle">"Selfie: reflections on TLS 1.3 with PSK"</span>, <time datetime="2019" class="refDate">2019</time>, <span>&lt;<a href="https://eprint.iacr.org/2019/347.pdf">https://eprint.iacr.org/2019/347.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SIGMA">[SIGMA]</dt>
         <dd>
@@ -8546,7 +8569,7 @@ Cipher suite names follow the naming convention:<a href="#appendix-B.4-1" class=
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">HASH</td>
-              <td class="text-left" rowspan="1" colspan="1">The hash algorithm used with HKDF</td>
+              <td class="text-left" rowspan="1" colspan="1">The hash algorithm used with HKDF and Transcript-Hash</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">VALUE</td>
@@ -8883,7 +8906,7 @@ or MAY be validated to match the fixed constant value.
 Version negotiation is performed using only the handshake versions
 (ClientHello.legacy_version and ServerHello.legacy_version, as well as the
 ClientHello, HelloRetryRequest, and ServerHello "supported_versions" extensions).
-In order to maximize interoperability with older endpoints, implementations
+To maximize interoperability with older endpoints, implementations
 that negotiate the use of TLS 1.0-1.2 SHOULD set the record layer
 version number to the negotiated version for the ServerHello and all
 records thereafter.<a href="#appendix-E-3" class="pilcrow">¶</a></p>
@@ -8920,7 +8943,7 @@ acceptable), the client MUST abort the handshake with a "protocol_version" alert
 specification properly and might abort connections upon encountering
 TLS extensions or versions which they are not aware of. Interoperability
 with buggy servers is a complex topic beyond the scope of this document.
-Multiple connection attempts may be required in order to negotiate
+Multiple connection attempts may be required to negotiate
 a backward-compatible connection; however, this practice is vulnerable
 to downgrade attacks and is NOT RECOMMENDED.<a href="#appendix-E.1-4" class="pilcrow">¶</a></p>
 </section>
@@ -9025,7 +9048,7 @@ and they MUST NOT be negotiated for any reason.<a href="#appendix-E.5-4" class="
 <p id="appendix-E.5-5">Implementations MUST NOT send an SSL version 2.0 compatible CLIENT-HELLO.
 Implementations MUST NOT negotiate TLS 1.3 or later using an SSL version 2.0 compatible
 CLIENT-HELLO. Implementations are NOT RECOMMENDED to accept an SSL version 2.0 compatible
-CLIENT-HELLO in order to negotiate older versions of TLS.<a href="#appendix-E.5-5" class="pilcrow">¶</a></p>
+CLIENT-HELLO to negotiate older versions of TLS.<a href="#appendix-E.5-5" class="pilcrow">¶</a></p>
 <p id="appendix-E.5-6">Implementations MUST NOT send a ClientHello.legacy_version or ServerHello.legacy_version
 set to 0x0300 or less. Any endpoint receiving a Hello message with
 ClientHello.legacy_version or ServerHello.legacy_version set to 0x0300 MUST
@@ -9062,7 +9085,10 @@ of the handshake, each side outputs its view of the following values:<a href="#a
 <ul class="normal">
 <li class="normal" id="appendix-F.1-2.1">
             <p id="appendix-F.1-2.1.1">A set of "session keys" (the various secrets derived from the main secret)
-from which can be derived a set of working keys.<a href="#appendix-F.1-2.1.1" class="pilcrow">¶</a></p>
+from which can be derived a set of working keys. Note that when early data
+is in use, secrets are also derived from the early secret. These enjoy
+somewhat weaker properties than those derived from the main secret,
+as detailed below.<a href="#appendix-F.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-F.1-2.2">
             <p id="appendix-F.1-2.2.1">A set of cryptographic parameters (algorithms, etc.).<a href="#appendix-F.1-2.2.1" class="pilcrow">¶</a></p>
@@ -9526,7 +9552,7 @@ item or transferring money) to be duplicated, thus harming the site or
 the user.<a href="#appendix-F.5-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-F.5-2.2">
-            <p id="appendix-F.5-2.2.1">Attackers can store and replay 0-RTT messages in order to
+            <p id="appendix-F.5-2.2.1">Attackers can store and replay 0-RTT messages to
 reorder them with respect to other messages (e.g., moving
 a delete to after a create).<a href="#appendix-F.5-2.2.1" class="pilcrow">¶</a></p>
 </li>
@@ -9626,10 +9652,10 @@ valid PSK identity and where there is an identity but it has an
 invalid binder identically.<a href="#appendix-F.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="sharing-psks">
+<div id="sharing-psks-across-protocol-versions">
 <section id="appendix-F.7">
-        <h3 id="name-sharing-psks">
-<a href="#appendix-F.7" class="section-number selfRef">F.7. </a><a href="#name-sharing-psks" class="section-name selfRef">Sharing PSKs</a>
+        <h3 id="name-sharing-psks-across-protoco">
+<a href="#appendix-F.7" class="section-number selfRef">F.7. </a><a href="#name-sharing-psks-across-protoco" class="section-name selfRef">Sharing PSKs Across Protocol Versions</a>
         </h3>
 <p id="appendix-F.7-1">TLS 1.3 takes a conservative approach to PSKs by binding them to a
 specific KDF.  By contrast, TLS 1.2 allows PSKs to be used with any
@@ -9644,26 +9670,43 @@ cross-protocol related output by not reusing PSKs between TLS 1.3 and
 TLS 1.2.<a href="#appendix-F.7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="misbinding-when-using-self-signed-certificates-or-raw-public-keys">
+<div id="external-psks-and-rerouting">
 <section id="appendix-F.8">
-        <h3 id="name-misbinding-when-using-self-">
-<a href="#appendix-F.8" class="section-number selfRef">F.8. </a><a href="#name-misbinding-when-using-self-" class="section-name selfRef">Misbinding when using Self-Signed Certificates or Raw Public Keys</a>
+        <h3 id="name-external-psks-and-rerouting">
+<a href="#appendix-F.8" class="section-number selfRef">F.8. </a><a href="#name-external-psks-and-rerouting" class="section-name selfRef">External PSKs and Rerouting</a>
         </h3>
-<p id="appendix-F.8-1">When TLS 1.3 is used with self-signed certificates without useful
+<p id="appendix-F.8-1">External PSKs in TLS are designed to be known to exactly one client
+and one server. However, as noted in <span>[<a href="#RFC9257" class="cite xref">RFC9257</a>]</span>, there are use cases
+where PSKs are shared between more than two entities. In such
+scenarios, in addition to the expected security weakness where a
+compromised group member can impersonate any other member, a malicious
+non-member can reroute handshakes between honest group members to
+connect them in unintended ways <span>[<a href="#Selfie" class="cite xref">Selfie</a>]</span>. <span>[<a href="#RFC9257" class="cite xref">RFC9257</a>]</span> provides
+recommendations for external PSK usage, including the use of external
+PSK importers as defined in <span>[<a href="#RFC9258" class="cite xref">RFC9258</a>]</span>, that prevent such malicious
+rerouting of messages<a href="#appendix-F.8-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="misbinding-when-using-self-signed-certificates-or-raw-public-keys">
+<section id="appendix-F.9">
+        <h3 id="name-misbinding-when-using-self-">
+<a href="#appendix-F.9" class="section-number selfRef">F.9. </a><a href="#name-misbinding-when-using-self-" class="section-name selfRef">Misbinding when using Self-Signed Certificates or Raw Public Keys</a>
+        </h3>
+<p id="appendix-F.9-1">When TLS 1.3 is used with self-signed certificates without useful
 identities (as in DTLS-SRTP <span>[<a href="#RFC5763" class="cite xref">RFC5763</a>]</span>) or raw public keys
-<span>[<a href="#RFC7250" class="cite xref">RFC7250</a>]</span> or for peer authentication, it may be vulnerable to
+<span>[<a href="#RFC7250" class="cite xref">RFC7250</a>]</span> for peer authentication, it may be vulnerable to
 misbinding attacks <span>[<a href="#MM24" class="cite xref">MM24</a>]</span>. This risk can be mitigated by using
-the "external_id_hash" extension <span>[<a href="#RFC8444" class="cite xref">RFC8444</a>]</span> or, if only
+the "external_id_hash" extension <span>[<a href="#RFC8844" class="cite xref">RFC8844</a>]</span> or, if only
 the server is being authenticated, by the server verifying
-that the "server_name" extension matches its expected identity.<a href="#appendix-F.8-1" class="pilcrow">¶</a></p>
+that the "server_name" extension matches its expected identity.<a href="#appendix-F.9-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="attacks-on-static-rsa">
-<section id="appendix-F.9">
+<section id="appendix-F.10">
         <h3 id="name-attacks-on-static-rsa">
-<a href="#appendix-F.9" class="section-number selfRef">F.9. </a><a href="#name-attacks-on-static-rsa" class="section-name selfRef">Attacks on Static RSA</a>
+<a href="#appendix-F.10" class="section-number selfRef">F.10. </a><a href="#name-attacks-on-static-rsa" class="section-name selfRef">Attacks on Static RSA</a>
         </h3>
-<p id="appendix-F.9-1">Although TLS 1.3 does not use RSA key transport and so is not
+<p id="appendix-F.10-1">Although TLS 1.3 does not use RSA key transport and so is not
 directly susceptible to Bleichenbacher-type attacks <span>[<a href="#Blei98" class="cite xref">Blei98</a>]</span> if TLS 1.3
 servers also support static RSA in the context of previous
 versions of TLS, then it may be possible to impersonate the server
@@ -9674,7 +9717,7 @@ might also be able to separate certificates with different keyUsage
 bits for static RSA decryption and RSA signature, but this technique
 relies on clients refusing to accept signatures using keys
 in certificates that do not have the digitalSignature bit set,
-and many clients do not enforce this restriction.<a href="#appendix-F.9-1" class="pilcrow">¶</a></p>
+and many clients do not enforce this restriction.<a href="#appendix-F.10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -10052,6 +10095,10 @@ change depending on previous interpretation (Issue 1227)<a href="#appendix-G-5.4
       Sam Scott
       Royal Holloway, University of London
       me@samjs.co.uk
+
+      Mohit Sethi
+      Aalto University
+      mohit@iki.fi
 
       Thomas Shrimpton
       University of Florida
