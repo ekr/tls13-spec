@@ -4,10 +4,10 @@
 
 Transport Layer Security                                     E. Rescorla
 Internet-Draft                                               Independent
-Obsoletes: 8446 (if approved)                          11 September 2025
+Obsoletes: 8446 (if approved)                          12 September 2025
 Updates: 5705, 6066, 7627, 8422 (if approved)                           
 Intended status: Standards Track                                        
-Expires: 15 March 2026
+Expires: 16 March 2026
 
 
         The Transport Layer Security (TLS) Protocol Version 1.3
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 March 2026.
+   This Internet-Draft will expire on 16 March 2026.
 
 Copyright Notice
 
@@ -3211,8 +3211,8 @@ Auth | {CertificateVerify*}
       unsigned integer in network byte order from the time of ticket
       issuance.  Servers MUST NOT use any value greater than 604800
       seconds (7 days).  The value of zero indicates that the ticket
-      should be discarded immediately fater use.  Clients MUST NOT use
-      tickets for longer than 7 days after issuance, regardless of the
+      should be discarded immediately.  Clients MUST NOT use tickets for
+      longer than 7 days after issuance, regardless of the
       ticket_lifetime, and MAY delete tickets earlier based on local
       policy.  A server MAY treat a ticket as valid for a shorter period
       of time than what is stated in the ticket_lifetime.
@@ -4144,7 +4144,7 @@ Auth | {CertificateVerify*}
 7.2.  Updating Traffic Secrets
 
    Once the handshake is complete, it is possible for either side to
-   update its sending traffic key using the KeyUpdate handshake message
+   update its sending traffic keys using the KeyUpdate handshake message
    defined in Section 4.6.3.  The next generation of traffic keys is
    computed by generating client_/server_application_traffic_secret_N+1
    from client_/server_application_traffic_secret_N as described in this
