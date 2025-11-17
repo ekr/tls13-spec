@@ -3040,10 +3040,11 @@ Auth | {CertificateVerify*}
    CertificateRequest message.
 
    In addition, the signature algorithm MUST be compatible with the key
-   The SHA-1 algorithm MUST NOT be used in any signatures of
-   CertificateVerify messages.  All SHA-1 signature algorithms in this
-   specification are defined solely for use in legacy certificates and
-   are not valid for CertificateVerify signatures.
+   in the sender's end-entity certificate.  The SHA-1 algorithm MUST NOT
+   be used in any signatures of CertificateVerify messages.  All SHA-1
+   signature algorithms in this specification are defined solely for use
+   in legacy certificates and are not valid for CertificateVerify
+   signatures.
 
    The receiver of a CertificateVerify message MUST verify the signature
    field.  The verification process takes as input:

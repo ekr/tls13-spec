@@ -5155,7 +5155,7 @@ algorithms (see <a href="#signature-algorithms" class="auto internal xref">Secti
 MUST be one of those present in the supported_signature_algorithms
 field of the "signature_algorithms" extension in the CertificateRequest message.<a href="#section-4.4.3-15" class="pilcrow">¶</a></p>
 <p id="section-4.4.3-16">In addition, the signature algorithm MUST be compatible with the key
-The SHA-1 algorithm MUST NOT be used
+in the sender's end-entity certificate. The SHA-1 algorithm MUST NOT be used
 in any signatures of CertificateVerify messages.
 All SHA-1 signature algorithms in this specification are defined solely
 for use in legacy certificates and are not valid for CertificateVerify
