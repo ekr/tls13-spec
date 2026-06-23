@@ -17,21 +17,22 @@ which specified TLS 1.3. This document obsoletes RFC 5246 (specifying TLS 1.2) a
 and updates RFCs 5705 and 6066. This document also specifies new requirements
 for TLS 1.2 implementations. 
     " name="description">
-<meta content="xml2rfc 3.33.0" name="generator">
+<meta content="xml2rfc 3.34.0" name="generator">
 <meta content="9846" name="rfc.number">
 <!-- Generator version information:
-  xml2rfc 3.33.0
-    Python 3.12.13
-    ConfigArgParse 1.7
+  xml2rfc 3.34.0
+    Python 3.14.5
+    ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 6.0.2
-    platformdirs 4.9.6
+    lxml 6.1.1
+    natsort 8.4.0
+    platformdirs 4.10.0
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.7.0
+    wcwidth 0.8.1
 -->
 <link href="rfc9846.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -298,16 +299,19 @@ h1, h2, h3, h4, h5, h6 {
   font-size-adjust: 0.5;
   color: var(--title-color);
 }
-h1#title {
-  font-size: 32px;
-  line-height: 40px;
-  clear: both;
-}
-h1#title, h1#rfcnum {
-  margin: 1.5em 0 0.2em;
-}
-h1#rfcnum + h1#title {
-  margin: 0.2em 0;
+h1 {
+  &#title {
+    font-size: 32px;
+    line-height: 40px;
+    clear: both;
+    margin: 1.5em 0 0.2em;
+  }
+  &#rfcnum {
+    margin: 1.5em 0 0.2em;
+    & + h1#title {
+      margin: 0.2em 0;
+    }
+  }
 }
 
 h1, h2, h3 {
@@ -327,10 +331,10 @@ h4, h5, h6 {
 #abstract+p {
   font-size: 18px;
   line-height: 24px;
-}
-#abstract+p code, #abstract+p samp, #abstract+p tt {
-  font-size: 16px;
-  line-height: 0;
+  & code, & samp, & tt {
+    font-size: 16px;
+    line-height: 0;
+  }
 }
 
 p {
@@ -341,59 +345,59 @@ p {
 div {
   margin: 0;
 }
-.alignRight.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignRight.art-text pre {
-  padding: 0;
-  width: auto;
-}
 .alignRight {
   margin: 1em 0;
-}
-.alignRight > *:first-child {
-  border: none;
-  margin: 0;
-  float: right;
-  clear: both;
-}
-.alignRight > *:nth-child(2) {
-  clear: both;
-  display: block;
-  border: none;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    margin: 0;
+    float: right;
+    clear: both;
+  }
+  & > *:nth-child(2) {
+    clear: both;
+    display: block;
+    border: none;
+  }
 }
 svg {
   display: block;
-}
-/* font-family isn't space-separated, but =~ will have to do */
-svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
-  font-family: var(--font-mono);
-}
-.alignCenter.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignCenter.art-text pre {
-  padding: 0;
-  width: auto;
+  /* font-family isn't space-separated, but =~ will have to do */
+  &[font-family~="monospace" i], & [font-family~="monospace" i] {
+    font-family: var(--font-mono);
+  }
 }
 .alignCenter {
   margin: 1em 0;
-}
-.alignCenter > *:first-child {
-  border: none;
-  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
-     support flexbox yet.
-  */
-  display: table;
-  margin: 0 auto;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+       support flexbox yet.
+    */
+    display: table;
+    margin: 0 auto;
+  }
 }
 
 /* lists */
@@ -431,26 +435,25 @@ dl {
     --indent: 5ch;
     & > dt {
       min-width: calc(var(--indent) - 2ch);
+      float: none;
     }
-  }
-  &.olPercent > dt {
-    float: none;
   }
 
   dl > dd > & {
     margin-top: 0.5em;
     margin-bottom: 0;
   }
-}
-dl:not(.dlNewline) > dt {
-  float: left;
-  margin-right: 2ch;
-  min-width: 8ch;
-}
-dl > dd {
-  margin-bottom: .8em;
-  margin-left: var(--indent) !important; /* stupid element overrides */
-  min-height: 2ex;
+
+  &:not(.dlNewline) > dt {
+    float: left;
+    margin-right: 2ch;
+    min-width: 8ch;
+  }
+  & > dd {
+    margin-bottom: .8em;
+    margin-left: var(--indent) !important; /* stupid element overrides */
+    min-height: 2ex;
+  }
 }
 :is(dl.compact, .dlCompact) > dd {
   margin-bottom: 0;
@@ -466,20 +469,22 @@ dl > dd {
 }
 
 /* links */
-a, a[href].selfRef:hover {
+a {
   text-decoration: none;
+  &[href] {
+    color: var(--link-color);
+    &:hover { text-decoration: underline; }
+    &.selfRef {
+      color: var(--text-color);
+      &:hover {
+        text-decoration: none;
+        background-color: var(--highlight-color);
+      }
+    }
+  }
 }
-a[href] {
-  color: var(--link-color);
-}
-a[href].selfRef, .iref + a[href].internal {
+.iref + a[href].internal {
   color: var(--text-color);
-}
-a[href]:hover {
-  text-decoration: underline;
-}
-a[href].selfRef:hover {
-  background-color: var(--highlight-color);
 }
 a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
   white-space: nowrap;
@@ -515,9 +520,9 @@ img {
 figure {
   margin: 0.5em 0;
   padding: 0;
-}
-figure blockquote {
-  margin: 0.8em 0.4em 0.4em;
+  & blockquote {
+    margin: 0.8em 0.4em 0.4em;
+  }
 }
 figcaption, caption {
   font-style: italic;
@@ -527,17 +532,19 @@ figcaption, caption {
 }
 @media screen {
   /* Auto-collapse boilerplate. */
-  :is(#status-of-memo, #copyright) p {
-    margin: -2px 0;
-    max-height: 0;
-    transition: max-height 2s ease, margin 0.5s ease 0.5s;
-    overflow: hidden;
-  }
-  :is(#status-of-memo, #copyright):hover p,
-  :is(#status-of-memo, #copyright) h2:target ~ p {
-    margin: 0.5em 0;
-    max-height: 500px;
-    overflow: auto;
+  :is(#status-of-memo, #copyright) {
+    & p {
+      margin: -2px 0;
+      max-height: 0;
+      transition: max-height 2s ease, margin 0.5s ease 0.5s;
+      overflow: hidden;
+    }
+    &:hover p,
+    & h2:target ~ p {
+      margin: 0.5em 0;
+      max-height: 500px;
+      overflow: auto;
+    }
   }
   pre, svg {
     display: inline-block;
@@ -587,25 +594,17 @@ table {
   max-width: 100%;
   margin: 0 0 1em;
   border-collapse: collapse;
-}
-table.right {
-  margin-left: auto;
-}
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-table.left {
-  margin-right: auto;
-}
-table .text-left {
-  text-align: left;
-}
-table .text-center {
-  text-align: center;
-}
-table .text-right {
-  text-align: right;
+  &.right { margin-left: auto; }
+  &.center { margin-left: auto; margin-right: auto; }
+  &.left { margin-right: auto; }
+  & .text-left { text-align: left; }
+  & .text-center { text-align: center; }
+  & .text-right { text-align: right; }
+  & caption {
+    margin: 0;
+    padding: 3px 0 3px 1em;
+  }
+  & p { margin: 0; }
 }
 
 thead, tbody {
@@ -625,13 +624,6 @@ th {
 :is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
 }
-table caption {
-  margin: 0;
-  padding: 3px 0 3px 1em;
-}
-table p {
-  margin: 0;
-}
 
 /* pilcrow */
 a.pilcrow {
@@ -642,18 +634,16 @@ a.pilcrow {
     color: var(--pilcrow-weak);
     &:hover { text-decoration: none; }
   }
-}
-@media not print {
-  :hover > a.pilcrow, a.pilcrow:focus {
-    opacity: 1;
+  @media not print {
+    :hover > &, &:focus {
+      opacity: 1;
+    }
+    &[href]:hover {
+      color: var(--pilcrow-strong);
+      background-color: transparent;
+    }
   }
-  a.pilcrow[href]:hover {
-    color: var(--pilcrow-strong);
-    background-color: transparent;
-  }
-}
-@media print {
-  a.pilcrow {
+  @media print {
     display: none;
   }
 }
@@ -712,9 +702,9 @@ sub, sup {
   font-size: 0.9em;
   font-style: italic;
   margin-top: 2em;
-}
-.docInfo .prepared {
-  float: right;
+  & .prepared {
+    float: right;
+  }
 }
 
 /* table of contents */
@@ -804,23 +794,27 @@ hr.addr {
   max-width: calc(100% - 16px);
 }
 @media (min-width: 500px) {
-  #authors-addresses > section {
-    column-count: 2;
-    column-gap: 20px;
-  }
-  #authors-addresses > section > h2 {
-    column-span: all;
-  }
-  /* hack for break-inside: avoid-column */
-  #authors-addresses address {
-    display: inline-block;
-    break-inside: avoid-column;
+  #authors-addresses {
+    & > section {
+      column-count: 2;
+      column-gap: 20px;
+    }
+    & > section > h2 {
+      column-span: all;
+    }
+    /* hack for break-inside: avoid-column */
+    & address {
+      display: inline-block;
+      break-inside: avoid-column;
+    }
   }
 }
 
 /* Comments */
-.rfcEditorRemove p:first-of-type {
-  font-style: italic;
+.rfcEditorRemove {
+  & p:first-of-type {
+    font-style: italic;
+  }
 }
 .cref {
   background-color: rgba(249, 232, 105, 0.3);
@@ -831,19 +825,21 @@ hr.addr {
 }
 
 @media screen {
-  #toc nav {
-    font-family: var(--font-title);
-    font-weight: 360;
-    & > ul { margin-bottom: 2em; }
-    & ul {
-      margin: 0 0 0 4px;
-      & :is(p, li) {
-        margin: 2px 0;
+  #toc {
+    & nav {
+      font-family: var(--font-title);
+      font-weight: 360;
+      & > ul { margin-bottom: 2em; }
+      & ul {
+        margin: 0 0 0 4px;
+        & :is(p, li) {
+          margin: 2px 0;
+        }
       }
     }
-  }
-  #toc a.toplink {
-    float: right;
+    & a.toplink {
+      float: right;
+    }
   }
 }
 @media not screen {
@@ -864,54 +860,54 @@ hr.addr {
     margin: 0;
     border-bottom: 1px solid #ccc;
     opacity: 0.6;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 2px 0 2px 6px;
-    padding-right: 1em;
-    font-size: 18px;
-    line-height: 24px;
-    min-width: 190px;
-    text-align: right;
-    background-color: #444;
-    color: white;
-    cursor: pointer;
-    &::before { /* css hamburger */
-      float: right;
-      position: relative;
-      width: 1em;
-      height: 1px;
-      left: -164px;
-      margin: 8px 0 0 0;
-      background: white none repeat scroll 0 0;
-      box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
-      content: "";
+    & h2 {
+      margin: 0;
+      padding: 2px 0 2px 6px;
+      padding-right: 1em;
+      font-size: 18px;
+      line-height: 24px;
+      min-width: 190px;
+      text-align: right;
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      &::before { /* css hamburger */
+        float: right;
+        position: relative;
+        width: 1em;
+        height: 1px;
+        left: -164px;
+        margin: 8px 0 0 0;
+        background: white none repeat scroll 0 0;
+        box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+        content: "";
+      }
     }
-  }
-  #toc nav {
-    display: none;
-    background-color: var(--background-color);
-    padding: 0.5em 1em 1em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    height: calc(100vh - 48px);
-    border-left: 1px solid #ddd;
-  }
-  #toc.active {
-    opacity: 1;
-    & nav { display: block; }
-  }
-  /* Make the collapsed ToC header render white on gray also when it's a link */
-  #toc h2 a,
-  #toc h2 a:is(:link, :focus, :hover),
-  #toc a.toplink,
-  #toc a.toplink:hover {
-    color: white;
-    background-color: #444;
-    text-decoration: none;
-  }
-  #toc a.toplink {
-    margin: 2px 0.5em 0;
+    & nav {
+      display: none;
+      background-color: var(--background-color);
+      padding: 0.5em 1em 1em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      height: calc(100vh - 48px);
+      border-left: 1px solid #ddd;
+    }
+    &.active {
+      opacity: 1;
+      & nav { display: block; }
+    }
+    /* Make the collapsed ToC header render white on gray also when it's a link */
+    & h2 a,
+    & h2 a:is(:link, :focus, :hover),
+    & a.toplink,
+    & a.toplink:hover {
+      color: white;
+      background-color: #444;
+      text-decoration: none;
+    }
+    & a.toplink {
+      margin: 2px 0.5em 0;
+    }
   }
 }
 
@@ -930,26 +926,26 @@ hr.addr {
     margin: 0;
     padding: 0;
     z-index: 1;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 0.25em 1em 1em 0;
-  }
-  #toc nav {
-    display: block;
-    height: calc(90vh - 84px);
-    bottom: 0;
-    padding: 0.5em 0 2em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
+    & h2 {
+      margin: 0;
+      padding: 0.25em 1em 1em 0;
+    }
+    & nav {
+      display: block;
+      height: calc(90vh - 84px);
+      bottom: 0;
+      padding: 0.5em 0 2em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+    & a.toplink {
+      margin: 8px 0.5em 0;
+    }
   }
   img { /* future proofing */
     max-width: 100%;
     height: auto;
-  }
-  #toc a.toplink {
-    margin: 8px 0.5em 0;
   }
 }
 
@@ -965,12 +961,13 @@ hr.addr {
   #n-copyright-notice {
     border-bottom: none;
   }
-  #toc, #n-introduction {
-    page-break-before: always;
-  }
   #toc {
+    page-break-before: always;
     border-top: none;
     padding-top: 0;
+  }
+  #n-introduction {
+    page-break-before: always;
   }
   figure, pre, .vcard {
     page-break-inside: avoid;
@@ -1032,17 +1029,19 @@ hr.addr {
 }
 
 /* SVG Trick: a prefix match works because only black and white are allowed */
-svg :is([stroke="black"], [stroke^="#000"]) {
-  stroke: var(--text-color);
-}
-svg :is([stroke="white"], [stroke^="#fff"]) {
-  stroke: var(--background-color);
-}
-svg :is([fill="black"], [fill^="#000"], :not([fill])) {
-  fill: var(--text-color);
-}
-svg :is([fill="white"], [fill^="#fff"]) {
-  fill: var(--background-color);
+svg {
+  & :is([stroke="black"], [stroke^="#000"]) {
+    stroke: var(--text-color);
+  }
+  & :is([stroke="white"], [stroke^="#fff"]) {
+    stroke: var(--background-color);
+  }
+  & :is([fill="black"], [fill^="#000"], :not([fill])) {
+    fill: var(--text-color);
+  }
+  & :is([fill="white"], [fill^="#fff"]) {
+    fill: var(--background-color);
+  }
 }
 </style>
 
@@ -3159,10 +3158,10 @@ handshake with an "illegal_parameter" alert if the value changes.<a href="#secti
    } Extension;
 
    enum {
-       server_name(0),                             /* RFC 6066 */
-       status_request(5),                          /* RFC 6066 */
-       supported_groups(10),                       /* RFC 8422, 7919 */
-       signature_algorithms(13),                   /* RFC 8446 */
+       server_name(0),                             /* RFC 6066, 9261 */
+       status_request(5),                          /* RFC 6066, 9846 */
+       supported_groups(10),                       /* RFC 7919, 9846 */
+       signature_algorithms(13),                   /* RFC 9846 */
        use_srtp(14),                               /* RFC 5764 */
        heartbeat(15),                              /* RFC 6520 */
        application_layer_protocol_negotiation(16), /* RFC 7301 */
@@ -3173,16 +3172,16 @@ handshake with an "illegal_parameter" alert if the value changes.<a href="#secti
        record_size_limit(28),                      /* RFC 8449 */
        delegated_credential(34),                   /* RFC 9345 */
        supported_ekt_ciphers(39),                  /* RFC 8870 */
-       pre_shared_key(41),                         /* RFC 8446 */
-       early_data(42),                             /* RFC 8446 */
-       supported_versions(43),                     /* RFC 8446 */
-       cookie(44),                                 /* RFC 8446 */
-       psk_key_exchange_modes(45),                 /* RFC 8446 */
-       certificate_authorities(47),                /* RFC 8446 */
-       oid_filters(48),                            /* RFC 8446 */
-       post_handshake_auth(49),                    /* RFC 8446 */
-       signature_algorithms_cert(50),              /* RFC 8446 */
-       key_share(51),                              /* RFC 8446 */
+       pre_shared_key(41),                         /* RFC 9846 */
+       early_data(42),                             /* RFC 9846 */
+       supported_versions(43),                     /* RFC 9846 */
+       cookie(44),                                 /* RFC 9846 */
+       psk_key_exchange_modes(45),                 /* RFC 9846 */
+       certificate_authorities(47),                /* RFC 9846 */
+       oid_filters(48),                            /* RFC 9846 */
+       post_handshake_auth(49),                    /* RFC 9846 */
+       signature_algorithms_cert(50),              /* RFC 9846 */
+       key_share(51),                              /* RFC 9846 */
        transparency_info(52),                      /* RFC 9162 */
        external_id_hash(55),                       /* RFC 8844 */
        external_session_id(56),                    /* RFC 8844 */
@@ -3194,8 +3193,8 @@ handshake with an "illegal_parameter" alert if the value changes.<a href="#secti
    } ExtensionType;
 </pre><a href="#section-4.3-2" class="pilcrow">¶</a>
 </div>
-<p id="section-4.3-3">Note: This list includes only extensions marked "Recommended" at the
-time of this writing.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">Note: This list includes only extensions marked
+"Recommended" and allowed for TLS 1.3 at the time of this writing.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
 <p id="section-4.3-4">Here:<a href="#section-4.3-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.3-5.1">
@@ -3254,22 +3253,22 @@ appears, it <span class="bcp14">MUST</span> abort the handshake with an "illegal
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">server_name <span>[<a href="#RFC6066" class="cite xref">RFC6066</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">server_name <span>[<a href="#RFC6066" class="cite xref">RFC6066</a>]</span> <span>[<a href="#RFC9261" class="cite xref">RFC9261</a>]</span>
 </td>
-              <td class="text-right" rowspan="1" colspan="1">CH, EE</td>
+              <td class="text-right" rowspan="1" colspan="1">CH, EE, CR</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">status_request <span>[<a href="#RFC6066" class="cite xref">RFC6066</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">status_request <span>[<a href="#RFC6066" class="cite xref">RFC6066</a>]</span> <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH, CR, CT</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">supported_groups <span>[<a href="#RFC7919" class="cite xref">RFC7919</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">supported_groups <span>[<a href="#RFC7919" class="cite xref">RFC7919</a>]</span> <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH, EE</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">signature_algorithms <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">signature_algorithms <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH, CR</td>
             </tr>
@@ -3324,52 +3323,52 @@ appears, it <span class="bcp14">MUST</span> abort the handshake with an "illegal
               <td class="text-right" rowspan="1" colspan="1">CH, EE</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">pre_shared_key <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">pre_shared_key <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH, SH</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">early_data <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">early_data <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH, EE, NST</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">supported_versions <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">supported_versions <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH, SH, HRR</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">cookie <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">cookie <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH, HRR</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">psk_key_exchange_modes <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">psk_key_exchange_modes <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">certificate_authorities <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">certificate_authorities <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH, CR</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">oid_filters <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">oid_filters <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CR</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">post_handshake_auth <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">post_handshake_auth <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">signature_algorithms_cert <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">signature_algorithms_cert <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH, CR</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">key_share <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>
+              <td class="text-left" rowspan="1" colspan="1">key_share <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>
 </td>
               <td class="text-right" rowspan="1" colspan="1">CH, SH, HRR</td>
             </tr>
@@ -3412,7 +3411,7 @@ appears, it <span class="bcp14">MUST</span> abort the handshake with an "illegal
         </table>
 </div>
 <p id="section-4.3-12">Note: This table includes only extensions marked
-"Recommended" at the time of this writing.<a href="#section-4.3-12" class="pilcrow">¶</a></p>
+"Recommended" and allowed for TLS 1.3 at the time of this writing.<a href="#section-4.3-12" class="pilcrow">¶</a></p>
 <p id="section-4.3-13">When multiple extensions of different types are present, the
 extensions <span class="bcp14">MAY</span> appear in any order, with the exception of
 "pre_shared_key" (<a href="#pre-shared-key-extension" class="auto internal xref">Section 4.3.11</a>) which <span class="bcp14">MUST</span> be
@@ -6999,9 +6998,8 @@ rsa_pss_rsae_sha256, rsa_pss_rsae_sha384, rsa_pss_rsae_sha512,
 rsa_pss_pss_sha256, rsa_pss_pss_sha384, rsa_pss_pss_sha512, and ed25519.
 The
 "Recommended" column is assigned a value of "N" unless explicitly
- requested, and adding a value with a "Recommended" value of "Y"
- requires Standards Action <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.  IESG Approval is <span class="bcp14">REQUIRED</span>
- for a Y-&gt;N transition.<a href="#section-11-9.1.1" class="pilcrow">¶</a></p>
+requested. See <span>[<a href="#RFC9847" class="cite xref">RFC9847</a>]</span> for additional information about "Recommended"
+column values and settings.<a href="#section-11-9.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-11-9.2">
           <p id="section-11-9.2.1">TLS PskKeyExchangeMode registry: Values in the
@@ -7012,9 +7010,8 @@ reserved for Private Use <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>
 populated with psk_ke (0) and psk_dhe_ke (1).  Both are marked as
 "Recommended".  The
 "Recommended" column is assigned a value of "N" unless explicitly
-requested, and adding a value with a "Recommended" value of "Y"
-requires Standards Action <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.  IESG Approval is <span class="bcp14">REQUIRED</span>
-for a Y-&gt;N transition.<a href="#section-11-9.2.1" class="pilcrow">¶</a></p>
+requested. See <span>[<a href="#RFC9847" class="cite xref">RFC9847</a>]</span> for additional information about "Recommended"
+column values and settings.<a href="#section-11-9.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <div id="bis-changes">
@@ -7024,10 +7021,16 @@ for a Y-&gt;N transition.<a href="#section-11-9.2.1" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-11.1-1">IANA has updated all references to <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span> in the IANA
 registries with references to this document.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
-<p id="section-11.1-2">IANA has renamed the "extended_master_secret" value
-in the TLS ExtensionType Values registry to "extended_main_secret".<a href="#section-11.1-2" class="pilcrow">¶</a></p>
-<p id="section-11.1-3">IANA has created  a value for the "general_error"
-alert in the TLS Alerts registry with the value given in <a href="#alert-protocol" class="auto internal xref">Section 6</a>.<a href="#section-11.1-3" class="pilcrow">¶</a></p>
+<p id="section-11.1-2">IANA has updated the "Recommended" column procedures to match <span>[<a href="#RFC9847" class="cite xref">RFC9847</a>]</span> for
+the TLS SignatureScheme and PskKeyExchangeMode registries.<a href="#section-11.1-2" class="pilcrow">¶</a></p>
+<p id="section-11.1-3">IANA has renamed the "extended_master_secret" value
+in the TLS ExtensionType Values registry to "extended_main_secret".<a href="#section-11.1-3" class="pilcrow">¶</a></p>
+<p id="section-11.1-4">IANA has created  a value for the "general_error"
+alert in the TLS Alerts registry with the value given in <a href="#alert-protocol" class="auto internal xref">Section 6</a>.<a href="#section-11.1-4" class="pilcrow">¶</a></p>
+<p id="section-11.1-5">IANA has updated added references to this document for the status_request and
+supported_groups entries in the TLS ExtensionType Values registry.<a href="#section-11.1-5" class="pilcrow">¶</a></p>
+<p id="section-11.1-6">IANA has updated the TLS ExtensionType value in the "TLS 1.3" column for
+cached_info to "CH, EE".<a href="#section-11.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -7150,6 +7153,10 @@ alert in the TLS Alerts registry with the value given in <a href="#alert-protoco
 <dt id="RFC8996">[RFC8996]</dt>
         <dd>
 <span class="refAuthor">Moriarty, K.</span> and <span class="refAuthor">S. Farrell</span>, <span class="refTitle">"Deprecating TLS 1.0 and TLS 1.1"</span>, <span class="seriesInfo">BCP 195</span>, <span class="seriesInfo">RFC 8996</span>, <span class="seriesInfo">DOI 10.17487/RFC8996</span>, <time datetime="2021-03" class="refDate">March 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8996">https://www.rfc-editor.org/rfc/rfc8996</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9846">[RFC9846]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3 (PLACEHOLDER)"</span>, <span class="seriesInfo">RFC 9846</span>, <time datetime="2026-05" class="refDate">May 2026</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9846">https://www.rfc-editor.org/info/rfc9846</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SHS">[SHS]</dt>
         <dd>
@@ -7493,6 +7500,10 @@ alert in the TLS Alerts registry with the value given in <a href="#alert-protoco
         <dd>
 <span class="refAuthor">Benjamin, D.</span> and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Importing External Pre-Shared Keys (PSKs) for TLS 1.3"</span>, <span class="seriesInfo">RFC 9258</span>, <span class="seriesInfo">DOI 10.17487/RFC9258</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9258">https://www.rfc-editor.org/rfc/rfc9258</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC9261">[RFC9261]</dt>
+        <dd>
+<span class="refAuthor">Sullivan, N.</span>, <span class="refTitle">"Exported Authenticators in TLS"</span>, <span class="seriesInfo">RFC 9261</span>, <span class="seriesInfo">DOI 10.17487/RFC9261</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9261">https://www.rfc-editor.org/rfc/rfc9261</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC9345">[RFC9345]</dt>
         <dd>
 <span class="refAuthor">Barnes, R.</span>, <span class="refAuthor">Iyengar, S.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">E. Rescorla</span>, <span class="refTitle">"Delegated Credentials for TLS and DTLS"</span>, <span class="seriesInfo">RFC 9345</span>, <span class="seriesInfo">DOI 10.17487/RFC9345</span>, <time datetime="2023-07" class="refDate">July 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9345">https://www.rfc-editor.org/rfc/rfc9345</a>&gt;</span>. </dd>
@@ -7500,6 +7511,10 @@ alert in the TLS Alerts registry with the value given in <a href="#alert-protoco
 <dt id="RFC9525">[RFC9525]</dt>
         <dd>
 <span class="refAuthor">Saint-Andre, P.</span> and <span class="refAuthor">R. Salz</span>, <span class="refTitle">"Service Identity in TLS"</span>, <span class="seriesInfo">RFC 9525</span>, <span class="seriesInfo">DOI 10.17487/RFC9525</span>, <time datetime="2023-11" class="refDate">November 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9525">https://www.rfc-editor.org/rfc/rfc9525</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9847">[RFC9847]</dt>
+        <dd>
+<span class="refAuthor">Salowey, J.</span> and <span class="refAuthor">S. Turner</span>, <span class="refTitle">"IANA Registry Updates for TLS and DTLS"</span>, <span class="seriesInfo">RFC 9847</span>, <span class="seriesInfo">DOI 10.17487/RFC9847</span>, <time datetime="2025-12" class="refDate">December 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9847">https://www.rfc-editor.org/rfc/rfc9847</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9849">[RFC9849]</dt>
         <dd>
@@ -7837,10 +7852,10 @@ might receive them from older TLS implementations.<a href="#appendix-B-1" class=
    } Extension;
 
    enum {
-       server_name(0),                             /* RFC 6066 */
-       status_request(5),                          /* RFC 6066 */
-       supported_groups(10),                       /* RFC 8422, 7919 */
-       signature_algorithms(13),                   /* RFC 8446 */
+       server_name(0),                             /* RFC 6066, 9261 */
+       status_request(5),                          /* RFC 6066, 9846 */
+       supported_groups(10),                       /* RFC 7919, 9846 */
+       signature_algorithms(13),                   /* RFC 9846 */
        use_srtp(14),                               /* RFC 5764 */
        heartbeat(15),                              /* RFC 6520 */
        application_layer_protocol_negotiation(16), /* RFC 7301 */
@@ -7851,16 +7866,16 @@ might receive them from older TLS implementations.<a href="#appendix-B-1" class=
        record_size_limit(28),                      /* RFC 8449 */
        delegated_credential(34),                   /* RFC 9345 */
        supported_ekt_ciphers(39),                  /* RFC 8870 */
-       pre_shared_key(41),                         /* RFC 8446 */
-       early_data(42),                             /* RFC 8446 */
-       supported_versions(43),                     /* RFC 8446 */
-       cookie(44),                                 /* RFC 8446 */
-       psk_key_exchange_modes(45),                 /* RFC 8446 */
-       certificate_authorities(47),                /* RFC 8446 */
-       oid_filters(48),                            /* RFC 8446 */
-       post_handshake_auth(49),                    /* RFC 8446 */
-       signature_algorithms_cert(50),              /* RFC 8446 */
-       key_share(51),                              /* RFC 8446 */
+       pre_shared_key(41),                         /* RFC 9846 */
+       early_data(42),                             /* RFC 9846 */
+       supported_versions(43),                     /* RFC 9846 */
+       cookie(44),                                 /* RFC 9846 */
+       psk_key_exchange_modes(45),                 /* RFC 9846 */
+       certificate_authorities(47),                /* RFC 9846 */
+       oid_filters(48),                            /* RFC 9846 */
+       post_handshake_auth(49),                    /* RFC 9846 */
+       signature_algorithms_cert(50),              /* RFC 9846 */
+       key_share(51),                              /* RFC 9846 */
        transparency_info(52),                      /* RFC 9162 */
        external_id_hash(55),                       /* RFC 8844 */
        external_session_id(56),                    /* RFC 8844 */
